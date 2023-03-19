@@ -18,7 +18,7 @@ A main function of the app will be allowing users to input recipes themselves to
 
 ## Schema
 
-<!-- NOT COMPLETE -->
+See here: https://docs.google.com/document/d/1I0FMmJSjetVe2UONbNeNAVdlJHznNBN_bidz8J_rTgs/edit?usp=sharing
 
 ## Features
 
