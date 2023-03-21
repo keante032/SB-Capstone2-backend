@@ -13,7 +13,7 @@ CREATE TABLE recipes (
         REFERENCES users ON DELETE CASCADE,
     public BOOLEAN NOT NULL DEFAULT FALSE,
     name TEXT NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT,
     ingredients JSONB NOT NULL,
     directions JSONB NOT NULL
 );
