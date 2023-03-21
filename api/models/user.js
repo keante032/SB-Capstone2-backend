@@ -6,6 +6,9 @@ const { BCRYPT_WORK_FACTOR } = require("../config.js");
  * User model has static methods that handle communicating with PostgreSQL to make changes to the users table 
  */
 class User {
+    /**
+     * Authenticate a user by comparing the provided password to the hashed password in the database
+     */
     static async authenticate(username, password) {
         // find user in database
         const result = await db.query(
@@ -31,6 +34,9 @@ class User {
         throw new Error('Invalid username or password');
     }
 
+    /**
+     * Add a new user in the database
+     */
     static async register({ username, password, email, isAdmin }) {
         // query user table for this username, throw error if found
         const checkForDuplicate = await db.query(
@@ -54,4 +60,62 @@ class User {
         const user = result.rows[0];
         return user;
     }
+
+    /**
+     * Get user details from the database
+     */
+    static async get(username) {
+        // find user in database
+        const result = await db.query(
+            `SELECT username, email, is_admin AS "isAdmin"
+            FROM users
+            WHERE username = $1`,
+            [username]
+        );
+        const user = result.rows[0];
+
+        // if user not found, throw error
+        if (!user) throw new Error(`No user: ${username}`);
+
+        // else return user object
+        return user;
+    }
+
+    // I am leaving out an update method for now
+    // I can add it later if I want to allow users to change their username, email, or password
+
+    // I am leaving out a delete method for now
+    // I can add it later if I want to allow users to delete their accounts
+
+    /**
+     * Save a recipe to the user's list of saved recipes
+     */
+    static async saveRecipe(username, recipeId) {
+        // find user in database
+        const result = await db.query(
+            `SELECT id
+            FROM users
+            WHERE username = $1`,
+            [username]
+        );
+        const user = result.rows[0];
+
+        // if user not found, throw error
+        if (!user) throw new Error(`No user: ${username}`);
+
+        // add new row to saves table
+        const saveResult = await db.query(
+            `INSERT INTO saves
+            (user_id, recipe_id)
+            VALUES ($1, $2)
+            RETURNING id`,
+            [user.id, recipeId]
+        );
+        const save = saveResult.rows[0];
+
+        // return save object
+        return save;
+    }
 }
+
+module.exports = User;
