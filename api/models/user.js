@@ -12,7 +12,7 @@ class User {
     static async authenticate(username, password) {
         // find user in database
         const result = await db.query(
-            `SELECT username, password, email, is_admin AS "isAdmin"
+            `SELECT id, username, password, is_admin AS "isAdmin"
             FROM users
             WHERE username = $1`,
             [username]
@@ -24,6 +24,7 @@ class User {
 
         // if passwords match, we'll return the user object
         // but we remove the password from that object before we return it
+        // { id, username, isAdmin }
         if (isValid === true) {
             delete user.password;
             return user;
@@ -50,12 +51,13 @@ class User {
         const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
         // add new user to database, then return details less the password
+        // { id, username, isAdmin }
         const result = await db.query(
             `INSERT INTO users
-            (username, password, email, is_admin)
-            VALUES ($1, $2, $3, $4)
-            RETURNING username, email, is_admin AS "isAdmin"`,
-            [username, hashedPassword, email, isAdmin]
+            (username, password, is_admin)
+            VALUES ($1, $2, $3)
+            RETURNING id, username, is_admin AS "isAdmin"`,
+            [username, hashedPassword, isAdmin]
         );
         const user = result.rows[0];
         return user;
@@ -67,7 +69,7 @@ class User {
     static async get(username) {
         // find user in database
         const result = await db.query(
-            `SELECT username, email, is_admin AS "isAdmin"
+            `SELECT id, username, is_admin AS "isAdmin"
             FROM users
             WHERE username = $1`,
             [username]
@@ -78,6 +80,7 @@ class User {
         if (!user) throw new Error(`No user: ${username}`);
 
         // else return user object
+        // { id, username, isAdmin }
         return user;
     }
 
