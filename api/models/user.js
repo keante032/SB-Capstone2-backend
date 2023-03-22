@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
 /**
- * User model has static methods that handle communicating with PostgreSQL to make changes to the users table 
+ * User model has static methods that handle communicating with PostgreSQL
+ * to make changes to the users table and the saves table
  */
 class User {
     /**
@@ -38,7 +39,7 @@ class User {
     /**
      * Add a new user in the database
      */
-    static async register({ username, password, email, isAdmin }) {
+    static async register({ username, password, isAdmin=false }) {
         // query user table for this username, throw error if found
         const checkForDuplicate = await db.query(
             `SELECT username
