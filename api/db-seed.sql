@@ -3,7 +3,6 @@ VALUES (
     'admin_kev',
     -- TODO: figure out how to hash password so I can enter it here
     -- alternatively: register through app and then ALTER TABLE to set is_admin to TRUE
-    'templeton.kevin@gmail.com',
     TRUE
 );
 
