@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require('morgan');
+const { authenticateJWT } = require("./middleware/auth");
 const authRoutes = require("./routes/auth");
 const recipesRoutes = require("./routes/recipes");
 const usersRoutes = require("./routes/users");
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan('tiny'));
+app.use(authenticateJWT);
 
 app.use("/auth", authRoutes);
 app.use("/recipes", recipesRoutes);
