@@ -1,22 +1,27 @@
 const express = require("express");
 
+const User = require("../models/user");
+const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
+
 const router = new express.Router();
 
-router.get("/", function (req, res, next) {
-    // TODO: retrieve user data from database and put it in res.send()
+/**
+ * GET /users/:username
+ * returns { user: { id, username, isAdmin } }
+ */
+router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
+    try {
+        const user = await User.get(req.params.username);
+        return res.json({ user });
+    } catch (err) {
+        return next(err);
+    }
 });
 
-router.post("/", function (req, res, next) {
-    // TODO: probably eliminate this; user registration under auth routes?
-});
+// I am leaving out a patch or put route for now
+// I can add it later if I want to allow users to change their username or password
 
-router.patch("/", function (req, res, next) {
-    // TODO: update existing user in database
-});
-
-router.delete("/", function (req, res, next) {
-    // TODO: delete user from database
-});
-
+// I am leaving out a delete route for now
+// I can add it later if I want to allow users to delete their accounts
 
 module.exports = router;
