@@ -24,7 +24,7 @@
                         "type": "string",
                         "minLength": 1
                     },
-                    "quantity": {
+                    "count": {
                         "type": "string",
                         "minLength": 1,
                         "examples": [
@@ -42,7 +42,7 @@
                 "additionalProperties": false,
                 "required": [
                     "name",
-                    "quantity"
+                    "count"
                 ]
             }
         },
