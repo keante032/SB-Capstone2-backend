@@ -12,6 +12,7 @@ function validateUserAuthSchema(req, res, next) {
         error.status = 400;
         return next(error);
     }
+    next();
 }
 
 function validateRecipeSchema(req, res, next) {
@@ -22,6 +23,7 @@ function validateRecipeSchema(req, res, next) {
         error.status = 400;
         return next(error);
     }
+    next();
 }
 
 module.exports = { validateUserAuthSchema, validateRecipeSchema };
