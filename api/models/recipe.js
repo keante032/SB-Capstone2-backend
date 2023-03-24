@@ -60,7 +60,7 @@ class Recipe {
             const user = userResult.rows[0];
 
             // check if user is not an admin and not the owner
-            if (!user.isAdmin && recipe.ownerId !== user.id) {
+            if (!user || (!user.isAdmin && recipe.ownerId !== user.id)) {
                 throw new Error(`Unauthorized`);
             }
         }
