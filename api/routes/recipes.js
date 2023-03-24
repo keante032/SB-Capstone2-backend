@@ -9,8 +9,8 @@ const router = new express.Router();
 /** Get details of recipe
  * GET /recipes/:id
  * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token,
- * but only if the recipe is private; if it's public, no user info is needed
- * returns { recipe: { id, ownerId, public, name, description, ingredients, directions } }
+ * but only if the recipe is private; if it's publiclyShared, no user info is needed
+ * returns { recipe: { id, ownerId, publiclyShared, name, description, ingredients, directions } }
  */
 router.get("/:id", async function (req, res, next) {
     try {
@@ -26,8 +26,8 @@ router.get("/:id", async function (req, res, next) {
 /** Add new recipe
  * POST /recipes/
  * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
- * expects { public, name, description, ingredients, directions }
- * returns { recipe: { id, ownerId, public, name, description, ingredients, directions } }
+ * expects { publiclyShared, name, description, ingredients, directions }
+ * returns { recipe: { id, ownerId, publiclyShared, name, description, ingredients, directions } }
  */
 router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
     try {
@@ -42,8 +42,8 @@ router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res,
 /** Update existing recipe
  * PUT /recipes/:id
  * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
- * expects { public, name, description, ingredients, directions }
- * returns { recipe: { id, ownerId, public, name, description, ingredients, directions } }
+ * expects { publiclyShared, name, description, ingredients, directions }
+ * returns { recipe: { id, ownerId, publiclyShared, name, description, ingredients, directions } }
  */
 router.put("/:id", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
     try {

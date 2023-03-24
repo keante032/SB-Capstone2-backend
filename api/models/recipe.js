@@ -9,7 +9,7 @@ class Recipe {
      * This is done by finding the user in the user table to get the user_id
      * Then we insert the recipe into the recipes table
      */
-    static async add(username, { public, name, description, ingredients, directions }) {
+    static async add(username, { publiclyShared, name, description, ingredients, directions }) {
         // find user in database
         const userResult = await db.query(
             `SELECT id, username
@@ -22,10 +22,10 @@ class Recipe {
         // add new recipe to database, then return recipe object
         const result = await db.query(
             `INSERT INTO recipes
-            (owner_id, public, name, description, ingredients, directions)
+            (owner_id, publicly_shared, name, description, ingredients, directions)
             VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id, owner_id AS "ownerId", public, name, description, ingredients, directions`,
-            [user.id, public, name, description, ingredients, directions]
+            RETURNING id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions`,
+            [user.id, publiclyShared, name, description, ingredients, directions]
         );
         const recipe = result.rows[0];
 
@@ -38,14 +38,14 @@ class Recipe {
     static async get(username, recipeId) {
         // find recipe in database
         const result = await db.query(
-            `SELECT id, owner_id AS "ownerId", public, name, description, ingredients, directions
+            `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions
             FROM recipes
             WHERE id = $1`,
             [recipeId]
         );
         const recipe = result.rows[0];
 
-        if (!recipe.public) {
+        if (!recipe.publiclyShared) {
             // find user in database
             const userResult = await db.query(
                 `SELECT id, username, is_admin AS "isAdmin"
@@ -69,7 +69,7 @@ class Recipe {
     /**
      * Edit a recipe in the database
      */
-    static async edit(username, recipeId, { public, name, description, ingredients, directions }) {
+    static async edit(username, recipeId, { publiclyShared, name, description, ingredients, directions }) {
         // find user in database
         const userResult = await db.query(
             `SELECT id, username
@@ -96,10 +96,10 @@ class Recipe {
         // edit recipe in database
         const editResult = await db.query(
             `UPDATE recipes
-            SET public = $1, name = $2, description = $3, ingredients = $4, directions = $5
+            SET publicly_shared = $1, name = $2, description = $3, ingredients = $4, directions = $5
             WHERE id = $6
-            RETURNING id, owner_id AS "ownerId", public, name, description, ingredients, directions`,
-            [public, name, description, ingredients, directions, recipeId]
+            RETURNING id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions`,
+            [publiclyShared, name, description, ingredients, directions, recipeId]
         );
         const editedRecipe = editResult.rows[0];
 
