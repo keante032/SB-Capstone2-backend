@@ -9,7 +9,7 @@ class Recipe {
      * This is done by finding the user in the user table to get the user_id
      * Then we insert the recipe into the recipes table
      */
-    static async add(username, { publiclyShared, name, description, ingredients, directions }) {
+    static async add(username, { publiclyShared=false, name, description, ingredients, directions }) {
         // find user in database
         const userResult = await db.query(
             `SELECT id, username
@@ -19,11 +19,15 @@ class Recipe {
         );
         const user = userResult.rows[0];
 
+        // JSON.stringify the arrays so Postgres can store them as JSON
+        ingredients = JSON.stringify(ingredients);
+        directions = JSON.stringify(directions);
+
         // add new recipe to database, then return recipe object
         const result = await db.query(
             `INSERT INTO recipes
             (owner_id, publicly_shared, name, description, ingredients, directions)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            VALUES ($1, $2, $3, $4, $5::json, $6::json)
             RETURNING id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions`,
             [user.id, publiclyShared, name, description, ingredients, directions]
         );
@@ -69,7 +73,7 @@ class Recipe {
     /**
      * Edit a recipe in the database
      */
-    static async edit(username, recipeId, { publiclyShared, name, description, ingredients, directions }) {
+    static async edit(username, recipeId, { publiclyShared=false, name, description, ingredients, directions }) {
         // find user in database
         const userResult = await db.query(
             `SELECT id, username
@@ -92,6 +96,10 @@ class Recipe {
         if (!user.isAdmin && recipe.ownerId !== user.id) {
             throw new Error(`Unauthorized`);
         }
+
+        // JSON.stringify the arrays so Postgres can store them as JSON
+        ingredients = JSON.stringify(ingredients);
+        directions = JSON.stringify(directions);
 
         // edit recipe in database
         const editResult = await db.query(
