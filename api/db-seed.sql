@@ -5,7 +5,7 @@ VALUES (
     TRUE
 );
 
-INSERT INTO recipes (owner_id, public, name, description, ingredients, directions)
+INSERT INTO recipes (owner_id, publicly_shared, name, description, ingredients, directions)
 VALUES (
     1,
     TRUE,

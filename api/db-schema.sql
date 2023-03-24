@@ -9,7 +9,7 @@ CREATE TABLE recipes (
     id SERIAL PRIMARY KEY,
     owner_id INTEGER
         REFERENCES users ON DELETE CASCADE,
-    public BOOLEAN NOT NULL DEFAULT FALSE,
+    publicly_shared BOOLEAN NOT NULL DEFAULT FALSE,
     name TEXT NOT NULL,
     description TEXT,
     ingredients JSONB NOT NULL,
