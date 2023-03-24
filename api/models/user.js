@@ -47,7 +47,7 @@ class User {
             WHERE username = $1`,
             [username]
         );
-        if (duplicateCheck.rows[0]) throw new Error('That username already exists.')
+        if (checkForDuplicate.rows[0]) throw new Error('That username already exists.')
 
         const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
