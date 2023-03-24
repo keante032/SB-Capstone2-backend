@@ -3,7 +3,7 @@
     "$id": "http://example.com/recipe.json",
     "type": "object",
     "properties": {
-        "public": {
+        "publiclyShared": {
             "type": "boolean",
             "default": false
         },
@@ -41,8 +41,7 @@
                 },
                 "additionalProperties": false,
                 "required": [
-                    "name",
-                    "count"
+                    "name"
                 ]
             }
         },
@@ -57,7 +56,6 @@
     },
     "additionalProperties": false,
     "required": [
-        "public",
         "name",
         "ingredients",
         "directions"
