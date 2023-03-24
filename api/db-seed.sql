@@ -1,4 +1,4 @@
-INSERT INTO users (username, password, email, is_admin)
+INSERT INTO users (username, password, is_admin)
 VALUES (
     'admin_kev',
     -- TODO: figure out how to hash password so I can enter it here
