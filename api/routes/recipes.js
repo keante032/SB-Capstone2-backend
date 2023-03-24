@@ -14,7 +14,7 @@ const router = new express.Router();
  */
 router.get("/:id", async function (req, res, next) {
     try {
-        const { username } = res.locals;
+        const { username } = res.locals.user;
         const { id } = req.params;
         const recipe = await Recipe.get(username, id);
         return res.json({ recipe });
@@ -31,7 +31,7 @@ router.get("/:id", async function (req, res, next) {
  */
 router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
     try {
-        const { username } = res.locals;
+        const { username } = res.locals.user;
         const recipe = await Recipe.add(username, req.body);
         return res.json({ recipe });
     } catch (err) {
@@ -47,7 +47,7 @@ router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res,
  */
 router.put("/:id", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
     try {
-        const { username } = res.locals;
+        const { username } = res.locals.user;
         const { id } = req.params;
         // inside of Recipe.edit, we will check if the user is the owner of the recipe
         const recipe = await Recipe.edit(username, id, req.body);
@@ -64,7 +64,7 @@ router.put("/:id", ensureLoggedIn, validateRecipeSchema, async function (req, re
  */
 router.delete("/:id", ensureLoggedIn, async function (req, res, next) {
     try {
-        const { username } = res.locals;
+        const { username } = res.locals.user;
         const { id } = req.params;
         // inside of Recipe.delete, we will check if the user is the owner of the recipe
         const deleted = await Recipe.delete(username, id);
