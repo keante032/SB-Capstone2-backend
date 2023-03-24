@@ -39,7 +39,7 @@ class User {
     /**
      * Add a new user in the database
      */
-    static async register({ username, password, isAdmin=false }) {
+    static async register(username, password, isAdmin=false) {
         // query user table for this username, throw error if found
         const checkForDuplicate = await db.query(
             `SELECT username
