@@ -38,7 +38,7 @@ class Recipe {
     static async get(username, recipeId) {
         // find user in database
         const userResult = await db.query(
-            `SELECT id, username
+            `SELECT id, username, is_admin AS "isAdmin"
             FROM users
             WHERE username = $1`,
             [username]
@@ -54,8 +54,8 @@ class Recipe {
         );
         const recipe = result.rows[0];
 
-        // check if recipe is private and user is not the owner
-        if (!recipe.public && recipe.ownerId !== user.id) {
+        // check if recipe is private, user is not the owner, and user is not an admin
+        if (!recipe.public && recipe.ownerId !== user.id && !user.isAdmin) {
             throw new Error(`Unauthorized`);
         }
 
