@@ -5,8 +5,9 @@ const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-/**
+/** Get details of user (don't actually see a use for this yet)
  * GET /users/:username
+ * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
  * returns { user: { id, username, isAdmin } }
  */
 router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
