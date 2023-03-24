@@ -12,7 +12,7 @@ class Recipe {
     static async add(username, { public, name, description, ingredients, directions }) {
         // find user in database
         const userResult = await db.query(
-            `SELECT id
+            `SELECT id, username
             FROM users
             WHERE username = $1`,
             [username]
@@ -24,7 +24,7 @@ class Recipe {
             `INSERT INTO recipes
             (owner_id, public, name, description, ingredients, directions)
             VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id, owner_id, public, name, description, ingredients, directions`,
+            RETURNING id, owner_id AS "ownerId", public, name, description, ingredients, directions`,
             [user.id, public, name, description, ingredients, directions]
         );
         const recipe = result.rows[0];
@@ -38,7 +38,7 @@ class Recipe {
     static async get(username, recipeId) {
         // find user in database
         const userResult = await db.query(
-            `SELECT id
+            `SELECT id, username
             FROM users
             WHERE username = $1`,
             [username]
@@ -68,7 +68,7 @@ class Recipe {
     static async edit(username, recipeId, { public, name, description, ingredients, directions }) {
         // find user in database
         const userResult = await db.query(
-            `SELECT id
+            `SELECT id, username
             FROM users
             WHERE username = $1`,
             [username]
@@ -77,7 +77,7 @@ class Recipe {
 
         // find recipe in database
         const result = await db.query(
-            `SELECT id, owner_id AS "ownerId", public, name, description, ingredients, directions
+            `SELECT id, owner_id AS "ownerId"
             FROM recipes
             WHERE id = $1`,
             [recipeId]
@@ -108,7 +108,7 @@ class Recipe {
     static async delete(username, recipeId) {
         // find user in database
         const userResult = await db.query(
-            `SELECT id
+            `SELECT id, username
             FROM users
             WHERE username = $1`,
             [username]
@@ -117,7 +117,7 @@ class Recipe {
 
         // find recipe in database
         const result = await db.query(
-            `SELECT id, owner_id AS "ownerId", public, name, description, ingredients, directions
+            `SELECT id, owner_id AS "ownerId"
             FROM recipes
             WHERE id = $1`,
             [recipeId]
