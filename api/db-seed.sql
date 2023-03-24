@@ -1,8 +1,7 @@
 INSERT INTO users (username, password, is_admin)
 VALUES (
     'admin_kev',
-    -- TODO: figure out how to hash password so I can enter it here
-    -- alternatively: register through app and then ALTER TABLE to set is_admin to TRUE
+    '$2b$12$4wasFQyGVqZv1Uu3MdGC.er1zYgbpYpsrwrsSlIi.HVshcuGmWhH6',
     TRUE
 );
 
