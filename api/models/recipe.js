@@ -121,15 +121,15 @@ class Recipe {
 
         // find recipe in database
         const result = await db.query(
-            `SELECT id, owner_id AS "ownerId"
+            `SELECT id, owner_id AS "ownerId", name
             FROM recipes
             WHERE id = $1`,
             [recipeId]
         );
         const recipe = result.rows[0];
 
-        // check if user is the owner
-        if (recipe.ownerId !== user.id) {
+        // check if user is not an admin and not the owner
+        if (!user.isAdmin && recipe.ownerId !== user.id) {
             throw new Error(`Unauthorized`);
         }
 
@@ -137,10 +137,14 @@ class Recipe {
         const deleteResult = await db.query(
             `DELETE FROM recipes
             WHERE id = $1`,
-            [recipeId]
+            [recipe.id]
         );
 
-        // returns undefined
+        return {
+            recipeId: `${recipe.id}`,
+            recipeName: `${recipe.name}`,
+            message: `Recipe deleted`
+        };
     }
 }
 
