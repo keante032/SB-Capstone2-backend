@@ -50,6 +50,12 @@ class RecipeApi {
         return res.recipe;
     }
 
+    /** Find recipes matching search criteria */
+    static async findRecipes(searchTerm) {
+        let res = await this.request(`recipes/search/${searchTerm}`);
+        return res.recipes;
+    }
+
     /** Add new recipe */
     static async addRecipe(data) {
         let res = await this.request(`recipes`, data, "post");
