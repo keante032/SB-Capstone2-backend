@@ -6,6 +6,23 @@ const { validateRecipeSchema } = require("../middleware/schemaValidator");
 
 const router = new express.Router();
 
+/** Get list of recipes matching search criteria
+ * GET /recipes/search/:searchTerm
+ * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
+ * but the search will still work without a valid token, only returning public recipes in that case
+ * returns { recipes: [{ id, ownerId, publiclyShared, name, description, ingredients, directions }, ...] }
+ */
+router.get("/search/:searchTerm", async function (req, res, next) {
+    try {
+        const username = res.locals.user && res.locals.user.username;
+        const { searchTerm } = req.params;
+        const recipes = await Recipe.find(username, searchTerm);
+        return res.json({ recipes });
+    } catch (err) {
+        return next(err);
+    }
+});
+
 /** Get details of recipe
  * GET /recipes/:id
  * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token,

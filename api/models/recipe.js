@@ -37,6 +37,39 @@ class Recipe {
     }
 
     /**
+     * Find recipes matching the search criteria
+     */
+    static async find(username, searchTerm) {
+        // find user in database
+        const userResult = await db.query(
+            `SELECT id, username, is_admin AS "isAdmin"
+            FROM users
+            WHERE username = $1`,
+            [username]
+        );
+        const user = userResult.rows[0];
+
+        // find recipes in database
+        const result = await db.query(
+            `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions
+            FROM recipes
+            WHERE name ILIKE $1
+            OR description ILIKE $1
+            OR ingredients::text ILIKE $1
+            OR directions::text ILIKE $1`,
+            [searchTerm]
+        );
+        const recipes = result.rows;
+
+        // if user is not an admin, filter to only recipes that are publicly shared or owned by the user
+        if (!user.isAdmin) {
+            return recipes.filter(r => r.publiclyShared || r.ownerId === user.id);
+        }
+
+        return recipes;
+    }
+
+    /**
      * Get one recipe from the database
      */
     static async get(username, recipeId) {
