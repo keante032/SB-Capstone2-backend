@@ -33,8 +33,8 @@ function Navigation({ logout }) {
                 <LinkContainer to="/login">
                     <Nav.Link>Login</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/signup">
-                    <Nav.Link>Signup</Nav.Link>
+                <LinkContainer to="/register">
+                    <Nav.Link>Register</Nav.Link>
                 </LinkContainer>
             </Nav>
         )
