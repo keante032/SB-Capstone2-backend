@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import jwt from "jsonwebtoken";
-import useLocalStorage from "./useLocalStorage";
-import RecipeApi from "./api";
+import useLocalStorage from "./helpers/useLocalStorage";
+import RecipeApi from "./helpers/api";
 import Navigation from './navigation/Navigation';
 import Routes from './navigation/Routes';
 
