@@ -58,11 +58,21 @@ function App() {
         }
     }
 
+    async function findRecipes(data) {
+        try {
+            let recipes = await RecipeApi.findRecipes(data);
+            return { success: true, recipes };
+        } catch (err) {
+            console.error("Search failed", err);
+            return { success: false, err };
+        }
+    }
+
     return (
         <Router>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
                 <Navigation logout={logout} />
-                <Routes login={login} register={register} />
+                <Routes login={login} register={register} findRecipes={findRecipes} />
             </UserContext.Provider>
         </Router>
     );

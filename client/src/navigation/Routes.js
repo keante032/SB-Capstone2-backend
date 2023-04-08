@@ -7,7 +7,7 @@ import Login from "../routes/Login";
 import Dashboard from "../routes/Dashboard";
 import RecipeSearch from "../routes/RecipeSearch";
 
-function Routes({ login, register }) {
+function Routes({ login, register, findRecipes }) {
     return (
         <div>
             <Switch>
@@ -27,7 +27,7 @@ function Routes({ login, register }) {
                     <Dashboard />
                 </PrivateRoute>
                 <PrivateRoute exact path="/recipe-search">
-                    <RecipeSearch />
+                    <RecipeSearch findRecipes={findRecipes} />
                 </PrivateRoute>
                 <Redirect to="/" />
             </Switch>
