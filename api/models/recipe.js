@@ -49,9 +49,9 @@ class Recipe {
         );
         const user = userResult.rows[0];
 
-        // find recipes in database
+        // find recipes in database, do not return ingredients or directions
         const result = await db.query(
-            `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions
+            `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description
             FROM recipes
             WHERE name ILIKE $1
             OR description ILIKE $1
