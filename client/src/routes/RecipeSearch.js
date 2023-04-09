@@ -3,8 +3,23 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Card from 'react-bootstrap/Card';
+import CardGroup from 'react-bootstrap/CardGroup';
 
-export default function RecipeSearch({ findRecipes }) {
+export default function RecipeSearch() {
+    const [recipes, setRecipes] = useState(null);
+
+    async function findRecipes(data) {
+        try {
+            const results = await RecipeApi.findRecipes(data);
+            setRecipes(results.recipes);
+            return { success: true };
+        } catch (err) {
+            console.error("Search failed", err);
+            return { success: false, err };
+        }
+    }
+
     return (
         <Container>
             <Row>
@@ -22,6 +37,20 @@ export default function RecipeSearch({ findRecipes }) {
                     </Form>
                 </Col>
                 <Col xs={1} md={2}></Col>
+            </Row>
+            <Row>
+                <Col>
+                    <CardGroup>
+                        {recipes && recipes.map(recipe => (
+                            <Card key={recipe.id}>
+                                <Card.Body>
+                                    <Card.Title>{recipe.title}</Card.Title>
+                                    <Card.Text>{recipe.description}</Card.Text>
+                                </Card.Body>
+                            </Card>
+                        ))}
+                    </CardGroup>
+                </Col>
             </Row>
         </Container>
     )
