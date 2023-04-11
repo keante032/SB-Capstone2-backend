@@ -4,6 +4,7 @@ import Home from "../routes/Home";
 import PublicRecipes from "../routes/PublicRecipes";
 import Register from "../routes/Register";
 import Login from "../routes/Login";
+import RecipePage from "../routes/RecipePage";
 import Dashboard from "../routes/Dashboard";
 import RecipeSearch from "../routes/RecipeSearch";
 
@@ -22,6 +23,9 @@ function Routes({ login, register }) {
                 </Route>
                 <Route exact path="/login">
                     <Login login={login} />
+                </Route>
+                <Route exact path="/recipe/:id">
+                    <RecipePage />
                 </Route>
                 <PrivateRoute exact path="/dashboard">
                     <Dashboard />

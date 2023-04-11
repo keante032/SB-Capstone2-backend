@@ -10,9 +10,11 @@ import Routes from "./navigation/Routes";
 export const TOKEN_STORAGE_ID = "recipe-app-token"
 
 export const UserContext = createContext();
+export const RecipesContext = createContext();
 
 function App() {
     const [currentUser, setCurrentUser] = useState(null);
+    const [recipes, setRecipes] = useState(null);
     const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
 
     // whenever the token changes, setCurrentUser
@@ -61,8 +63,10 @@ function App() {
     return (
         <Router>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-                <Navigation logout={logout} />
-                <Routes login={login} register={register} />
+                <RecipesContext.Provider value={{ recipes, setRecipes }}>
+                    <Navigation logout={logout} />
+                    <Routes login={login} register={register} />
+                </RecipesContext.Provider>
             </UserContext.Provider>
         </Router>
     );

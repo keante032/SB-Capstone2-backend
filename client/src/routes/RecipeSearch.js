@@ -7,7 +7,7 @@ import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 
 export default function RecipeSearch() {
-    const [recipes, setRecipes] = useState(null);
+    const { recipes, setRecipes } = useContext(RecipesContext);
 
     async function findRecipes(data) {
         try {
@@ -18,7 +18,27 @@ export default function RecipeSearch() {
             console.error("Search failed", err);
             return { success: false, err };
         }
-    }
+    };
+
+    function renderRecipes() {
+        return (
+            <Row>
+                <Col>
+                    <CardGroup>
+                        {recipes.map(recipe => (
+                            <Card key={recipe.id}>
+                                <Card.Body>
+                                    <Card.Title>{recipe.title}</Card.Title>
+                                    <Card.Text>{recipe.description}</Card.Text>
+                                </Card.Body>
+                                <Button variant="primary" href={`/recipe/${recipe.id}`}>View Recipe</Button>
+                            </Card>
+                        ))}
+                    </CardGroup>
+                </Col>
+            </Row>
+        )
+    };
 
     return (
         <Container>
@@ -38,20 +58,7 @@ export default function RecipeSearch() {
                 </Col>
                 <Col xs={1} md={2}></Col>
             </Row>
-            <Row>
-                <Col>
-                    <CardGroup>
-                        {recipes && recipes.map(recipe => (
-                            <Card key={recipe.id}>
-                                <Card.Body>
-                                    <Card.Title>{recipe.title}</Card.Title>
-                                    <Card.Text>{recipe.description}</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        ))}
-                    </CardGroup>
-                </Col>
-            </Row>
+            {recipes.length > 0 && renderRecipes()}
         </Container>
     )
 }
