@@ -10,13 +10,27 @@ const router = new express.Router();
  * GET /recipes/search/:searchTerm
  * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
  * but the search will still work without a valid token, only returning public recipes in that case
- * returns { recipes: [{ id, ownerId, publiclyShared, name, description, ingredients, directions }, ...] }
+ * returns { recipes: [{ id, ownerId, publiclyShared, name, description }, ...] }
  */
 router.get("/search/:searchTerm", async function (req, res, next) {
     try {
         const username = res.locals.user && res.locals.user.username;
         const { searchTerm } = req.params;
         const recipes = await Recipe.find(username, searchTerm);
+        return res.json({ recipes });
+    } catch (err) {
+        return next(err);
+    }
+});
+
+/** Get list of public recipes
+ * GET /recipes/public
+ * returns { recipes: [{ id, ownerId, publiclyShared, name, description }, ...] }
+ * no authorization required
+ */
+router.get("/public", async function (req, res, next) {
+    try {
+        const recipes = await Recipe.findPublic();
         return res.json({ recipes });
     } catch (err) {
         return next(err);

@@ -37,6 +37,21 @@ class Recipe {
     }
 
     /**
+     * Get all public recipes
+     */
+    static async getPublic() {
+        // find recipes in database, do not return ingredients or directions
+        const result = await db.query(
+            `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description
+            FROM recipes
+            WHERE publicly_shared = true`
+        );
+        const recipes = result.rows;
+
+        return recipes;
+    }
+
+    /**
      * Find recipes matching the search criteria
      */
     static async find(username, searchTerm) {
