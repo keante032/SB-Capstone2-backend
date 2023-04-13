@@ -56,6 +56,12 @@ class RecipeApi {
         return res.recipes;
     }
 
+    /** Get all public recipes */
+    static async getPublicRecipes() {
+        let res = await this.request(`recipes/public`);
+        return res.recipes;
+    }
+
     /** Add new recipe */
     static async addRecipe(data) {
         let res = await this.request(`recipes`, data, "post");
