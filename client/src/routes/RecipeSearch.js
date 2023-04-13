@@ -31,7 +31,9 @@ export default function RecipeSearch() {
                                     <Card.Title>{recipe.title}</Card.Title>
                                     <Card.Text>{recipe.description}</Card.Text>
                                 </Card.Body>
-                                <Button variant="primary" href={`/recipe/${recipe.id}`}>View Recipe</Button>
+                                <LinkContainer to={`/recipe/${recipe.id}`}>
+                                    <Button variant="primary">View Recipe</Button>
+                                </LinkContainer>
                             </Card>
                         ))}
                     </CardGroup>
