@@ -96,6 +96,13 @@ class Recipe {
             [recipeId]
         );
         const recipe = result.rows[0];
+        const nameResult = await db.query(
+            `SELECT username
+            FROM users
+            WHERE id = $1`,
+            [recipe.ownerId]
+        );
+        recipe.ownerName = nameResult.rows[0].username;
 
         if (!recipe.publiclyShared) {
             // find user in database
