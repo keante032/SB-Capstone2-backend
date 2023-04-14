@@ -3,23 +3,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useContext, useEffect } from "react";
 
-export default function PublicRecipes() {
+export default async function PublicRecipes() {
     const { recipes, setRecipes } = useContext(RecipesContext);
 
-    async function publicRecipes() {
-        try {
-            const results = await RecipeApi.getPublicRecipes();
-            setRecipes(results.recipes);
-            return { success: true };
-        } catch (err) {
-            console.error("Search failed", err);
-            return { success: false, err };
-        }
-    };
-
-    useEffect(() => {
-        publicRecipes();
-    }, []);
+    const results = await RecipeApi.getPublicRecipes();
+    setRecipes(results.recipes);
 
     return (
         <Container>
