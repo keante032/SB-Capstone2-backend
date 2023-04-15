@@ -7,8 +7,10 @@ import Login from "../routes/Login";
 import RecipePage from "../routes/RecipePage";
 import Dashboard from "../routes/Dashboard";
 import RecipeSearch from "../routes/RecipeSearch";
+import RecipeEdit from "../routes/RecipeEdit";
+import RecipeNew from "../routes/RecipeNew";
 
-function Routes({ login, register }) {
+function Routes({ login, register, editRecipe, addRecipe }) {
     return (
         <div>
             <Switch>
@@ -34,7 +36,10 @@ function Routes({ login, register }) {
                     <RecipeSearch />
                 </PrivateRoute>
                 <PrivateRoute exact path="/recipe-edit/:id">
-                    <RecipeEdit />
+                    <RecipeEdit editRecipe={editRecipe} />
+                </PrivateRoute>
+                <PrivateRoute exact path="/recipe-add/">
+                    <RecipeNew addRecipe={addRecipe} />
                 </PrivateRoute>
                 <Redirect to="/" />
             </Switch>

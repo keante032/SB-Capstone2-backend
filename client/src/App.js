@@ -60,12 +60,32 @@ function App() {
         }
     }
 
+    async function editRecipe(id, data) {
+        try {
+            let recipe = await RecipeApi.updateRecipe(id, data);
+            return { success: true };
+        } catch (err) {
+            console.error("Update failed", err);
+            return { success: false, err };
+        }
+    }
+
+    async function addRecipe(data) {
+        try {
+            let recipe = await RecipeApi.addRecipe(data);
+            return { success: true };
+        } catch (err) {
+            console.error("Update failed", err);
+            return { success: false, err };
+        }
+    }
+
     return (
         <Router>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
                 <RecipesContext.Provider value={{ recipes, setRecipes }}>
                     <Navigation logout={logout} />
-                    <Routes login={login} register={register} />
+                    <Routes login={login} register={register} editRecipe={editRecipe} addRecipe={addRecipe} />
                 </RecipesContext.Provider>
             </UserContext.Provider>
         </Router>
