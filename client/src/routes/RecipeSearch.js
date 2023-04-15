@@ -5,6 +5,9 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
+import { LinkContainer } from "react-router-bootstrap";
+import { useContext } from "react";
+import { RecipesContext } from "../App";
 
 export default function RecipeSearch() {
     const { recipes, setRecipes } = useContext(RecipesContext);
