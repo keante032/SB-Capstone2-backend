@@ -33,6 +33,9 @@ function Routes({ login, register }) {
                 <PrivateRoute exact path="/recipe-search">
                     <RecipeSearch />
                 </PrivateRoute>
+                <PrivateRoute exact path="/recipe-edit/:id">
+                    <RecipeEdit />
+                </PrivateRoute>
                 <Redirect to="/" />
             </Switch>
         </div>
