@@ -21,8 +21,6 @@ export default async function RecipePage() {
                     <h1>{recipe.name}</h1>
                     <h2>{recipe.ownerName}</h2>
                     <p>{recipe.description}</p>
-                    {/* Edit button in linkcontainer that routes to /recipe-edit/:id */}
-                    {/* if currentUser */}
                     {currentUser && currentUser.username === recipe.ownerName && (
                         <LinkContainer to={`/recipe-edit/${id}`}>
                             <Button variant="primary">Edit Recipe</Button>
