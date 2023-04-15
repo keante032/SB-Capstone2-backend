@@ -23,6 +23,22 @@ export default function RecipeSearch() {
         }
     };
 
+    const [formData, setFormData] = useState({
+        search: ""
+    });
+    const [formErrors, setFormErrors] = useState([]);
+
+    async function handleSubmit(evt) {
+        evt.preventDefault();
+        let result = await findRecipes(formData);
+        if (!result.success) setFormErrors(result.err);
+    }
+
+    function handleChange(evt) {
+        const { name, value } = evt.target;
+        setFormData(data => ({ ...data, [name]: value }));
+    }
+
     function renderRecipes() {
         return (
             <Row>
@@ -51,11 +67,21 @@ export default function RecipeSearch() {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>Recipe Search</h1>
-                    <Form onSubmit={findRecipes}>
+                    <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="search">
                             <Form.Label>Search</Form.Label>
-                            <Form.Control type="search" placeholder="Search for a recipe" />
+                            <Form.Control type="search" placeholder="Search for a recipe" onChange={handleChange} />
                         </Form.Group>
+                        {formErrors.length
+                            ? <Alert key="danger" variant="danger" >
+                                {formErrors.map(error => (
+                                    <p key={error}>
+                                        {error}
+                                    </p>
+                                ))}
+                            </Alert>
+                            : null
+                        }
                         <Button variant="primary" type="submit">
                             Search
                         </Button>

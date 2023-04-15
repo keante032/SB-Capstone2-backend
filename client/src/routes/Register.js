@@ -21,7 +21,7 @@ export default function Register({ register }) {
         if (result.success) {
             history.push("/dashboard");
         } else {
-            setFormErrors(result.errors);
+            setFormErrors(result.err);
         }
     }
 

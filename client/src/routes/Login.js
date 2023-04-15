@@ -21,7 +21,7 @@ export default function Login({ login }) {
         if (result.success) {
             history.push("/dashboard");
         } else {
-            setFormErrors(result.errors);
+            setFormErrors(result.err);
         }
     }
 
