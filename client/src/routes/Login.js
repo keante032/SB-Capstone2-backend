@@ -1,14 +1,9 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert";
+import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login({ login }) {
-    const history = useHistory();
+    let navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -19,7 +14,7 @@ export default function Login({ login }) {
         evt.preventDefault();
         let result = await login(formData);
         if (result.success) {
-            history.push("/dashboard");
+            navigate("/user/dashboard");
         } else {
             setFormErrors(result.err);
         }

@@ -1,10 +1,4 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Card from 'react-bootstrap/Card';
-import CardGroup from 'react-bootstrap/CardGroup';
+import { Container, Row, Col, Button, Form, Card, CardGroup } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useContext } from "react";
 import { RecipesContext } from "../App";
@@ -50,7 +44,7 @@ export default function RecipeSearch() {
                                     <Card.Title>{recipe.title}</Card.Title>
                                     <Card.Text>{recipe.description}</Card.Text>
                                 </Card.Body>
-                                <LinkContainer to={`/recipe/${recipe.id}`}>
+                                <LinkContainer to={`/recipes/${recipe.id}`}>
                                     <Button variant="primary">View Recipe</Button>
                                 </LinkContainer>
                             </Card>

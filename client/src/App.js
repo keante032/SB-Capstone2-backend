@@ -1,10 +1,19 @@
 import { createContext, useEffect, useState } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import useLocalStorage from "./helpers/useLocalStorage";
 import RecipeApi from "./helpers/api";
 import Navigation from "./navigation/Navigation";
-import Routes from "./navigation/Routes";
+import PrivateRoute from "./navigation/PrivateRoute";
+import Home from "./routes/Home";
+import PublicRecipes from "./routes/PublicRecipes";
+import Register from "./routes/Register";
+import Login from "./routes/Login";
+import RecipePage from "./routes/RecipePage";
+import Dashboard from "./routes/Dashboard";
+import RecipeSearch from "./routes/RecipeSearch";
+import RecipeEdit from "./routes/RecipeEdit";
+import RecipeNew from "./routes/RecipeNew";
 
 // Key name for storing token in localStorage
 export const TOKEN_STORAGE_ID = "recipe-app-token"
@@ -73,7 +82,7 @@ function App() {
     async function addRecipe(data) {
         try {
             let recipe = await RecipeApi.addRecipe(data);
-            return { success: true };
+            return { success: true, recipeId: recipe.id };
         } catch (err) {
             console.error("Update failed", err);
             return { success: false, err };
@@ -81,14 +90,28 @@ function App() {
     }
 
     return (
-        <Router>
+        <BrowserRouter>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
                 <RecipesContext.Provider value={{ recipes, setRecipes }}>
                     <Navigation logout={logout} />
-                    <Routes login={login} register={register} editRecipe={editRecipe} addRecipe={addRecipe} />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="recipes">
+                            <Route path="public" element={<PublicRecipes />} />
+                            <Route path=":id" element={<RecipePage />} />
+                            <PrivateRoute path="search" element={<RecipeSearch />} />
+                            <PrivateRoute path="add" element={<RecipeNew addRecipe={addRecipe} />} />
+                            <PrivateRoute path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} />} />
+                        </Route>
+                        <Route path="user">
+                            <Route path="register" element={<Register register={register} />} />
+                            <Route path="login" element={<Login login={login} />} />
+                            <PrivateRoute path="dashboard" element={<Dashboard />} />
+                        </Route>
+                    </Routes>
                 </RecipesContext.Provider>
             </UserContext.Provider>
-        </Router>
+        </BrowserRouter>
     );
 }
 
