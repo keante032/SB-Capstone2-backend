@@ -13,10 +13,10 @@ function Navigation({ logout }) {
     function loggedInNav() {
         return (
             <Nav className="ms-auto">
-                <LinkContainer to="/dashboard">
+                <LinkContainer to="/user/dashboard">
                     <Nav.Link>Dashboard</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/recipe-search">
+                <LinkContainer to="/recipes/search">
                     <Nav.Link>Recipe Search</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/">
@@ -29,13 +29,13 @@ function Navigation({ logout }) {
     function loggedOutNav() {
         return (
             <Nav className="ms-auto">
-                <LinkContainer to="/public-recipes">
+                <LinkContainer to="/recipes/public">
                     <Nav.Link>Public Recipes</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/login">
+                <LinkContainer to="/user/login">
                     <Nav.Link>Login</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="/register">
+                <LinkContainer to="/user/register">
                     <Nav.Link>Register</Nav.Link>
                 </LinkContainer>
             </Nav>
