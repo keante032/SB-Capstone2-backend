@@ -20,7 +20,7 @@ export default async function PublicRecipes() {
                         {recipes.map(recipe => (
                             <Card key={recipe.id}>
                                 <Card.Body>
-                                    <Card.Title>{recipe.title}</Card.Title>
+                                    <Card.Title>{recipe.name}</Card.Title>
                                     <Card.Text>{recipe.description}</Card.Text>
                                 </Card.Body>
                                 <LinkContainer to={`/recipes/${recipe.id}`}>
