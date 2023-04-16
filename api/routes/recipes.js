@@ -23,6 +23,21 @@ router.get("/search/:searchTerm", async function (req, res, next) {
     }
 });
 
+/** Get list of own recipes
+ * GET /recipes/my
+ * returns { recipes: [{ id, ownerId, publiclyShared, name, description }, ...] }
+ * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
+ */
+router.get("/my", ensureLoggedIn, async function (req, res, next) {
+    try {
+        const username = res.locals.user && res.locals.user.username;
+        const recipes = await Recipe.getMine(username);
+        return res.json({ recipes });
+    } catch (err) {
+        return next(err);
+    }
+});
+
 /** Get list of public recipes
  * GET /recipes/public
  * returns { recipes: [{ id, ownerId, publiclyShared, name, description }, ...] }
@@ -30,7 +45,7 @@ router.get("/search/:searchTerm", async function (req, res, next) {
  */
 router.get("/public", async function (req, res, next) {
     try {
-        const recipes = await Recipe.findPublic();
+        const recipes = await Recipe.getPublic();
         return res.json({ recipes });
     } catch (err) {
         return next(err);

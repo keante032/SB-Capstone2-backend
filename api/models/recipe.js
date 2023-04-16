@@ -37,6 +37,31 @@ class Recipe {
     }
 
     /**
+     * Get all own recipes
+     */
+    static async getMine(username) {
+        // find user in database
+        const userResult = await db.query(
+            `SELECT id, username, is_admin AS "isAdmin"
+            FROM users
+            WHERE username = $1`,
+            [username]
+        );
+        const user = userResult.rows[0];
+
+        // find recipes in database, do not return ingredients or directions
+        const result = await db.query(
+            `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description
+            FROM recipes
+            WHERE owner_id = $1`,
+            [user.id]
+        );
+        const recipes = result.rows;
+
+        return recipes;
+    }
+
+    /**
      * Get all public recipes
      */
     static async getPublic() {
