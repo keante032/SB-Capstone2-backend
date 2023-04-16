@@ -1,9 +1,6 @@
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, redirect } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
@@ -12,6 +9,9 @@ export default async function RecipePage() {
     const { id } = useParams();
 
     const recipe = await RecipeApi.getRecipe(id);
+
+    // If the recipe is private and the current user is not the owner, redirect to recipe search
+    if (!recipe.publiclyShared && currentUser.username !== recipe.ownerName) return redirect("/recipes/search");
 
     return (
         <Container>
@@ -22,7 +22,7 @@ export default async function RecipePage() {
                     <h2>{recipe.ownerName}</h2>
                     <p>{recipe.description}</p>
                     {currentUser && currentUser.username === recipe.ownerName && (
-                        <LinkContainer to={`/recipe-edit/${id}`}>
+                        <LinkContainer to={`/recipes/edit/${id}`}>
                             <Button variant="primary">Edit Recipe</Button>
                         </LinkContainer>
                     )}
