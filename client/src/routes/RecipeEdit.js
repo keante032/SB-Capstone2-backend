@@ -1,6 +1,6 @@
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useParams, useNavigate, redirect } from "react-router-dom";
+import { useContext, useState } from "react";
 import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
@@ -10,9 +10,6 @@ export default async function RecipeEdit(editRecipe) {
     let navigate = useNavigate();
 
     const recipe = await RecipeApi.getRecipe(id);
-
-    // If the current user is not the owner, redirect to recipe search
-    if (currentUser.username !== recipe.ownerName) return redirect("/recipes/search");
 
     const [formData, setFormData] = useState({
         name: recipe.name,
@@ -52,6 +49,9 @@ export default async function RecipeEdit(editRecipe) {
         const { name, value } = evt.target;
         setFormData(data => ({ ...data, [name]: value }));
     }
+
+    // If the current user is not the owner, redirect to recipe search
+    if (currentUser.username !== recipe.ownerName) return redirect("/recipes/search");
 
     return (
         <Container>
