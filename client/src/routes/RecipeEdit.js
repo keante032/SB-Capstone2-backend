@@ -50,6 +50,11 @@ export default async function RecipeEdit(editRecipe) {
         setFormData(data => ({ ...data, [name]: value }));
     }
 
+    // If no user logged in, redirect to login
+    if (!currentUser) {
+        return redirect("/user/login");
+    }
+
     // If the current user is not the owner, redirect to recipe search
     if (currentUser.username !== recipe.ownerName) return redirect("/recipes/search");
 

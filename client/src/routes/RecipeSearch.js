@@ -1,10 +1,12 @@
 import { Container, Row, Col, Button, Form, Alert, Card, CardGroup } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { redirect } from "react-router-dom";
 import { useContext, useState } from "react";
-import { RecipesContext } from "../App";
+import { RecipesContext, UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
 export default function RecipeSearch() {
+    const { currentUser } = useContext(UserContext);
     const { recipes, setRecipes } = useContext(RecipesContext);
 
     async function findRecipes(data) {
@@ -32,6 +34,11 @@ export default function RecipeSearch() {
     function handleChange(evt) {
         const { name, value } = evt.target;
         setFormData(data => ({ ...data, [name]: value }));
+    }
+
+    // If no user logged in, redirect to login
+    if (!currentUser) {
+        return redirect("/user/login");
     }
 
     function renderRecipes() {

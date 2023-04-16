@@ -1,14 +1,21 @@
 import { Container, Row, Col, Button, CardGroup, Card } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { redirect } from "react-router-dom";
 import { useContext } from "react";
-import { RecipesContext } from "../App";
+import { RecipesContext, UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
 export default async function Dashboard() {
+    const { currentUser } = useContext(UserContext);
     const { recipes, setRecipes } = useContext(RecipesContext);
 
     const results = await RecipeApi.getMyRecipes();
     setRecipes(results.recipes);
+
+    // If no user logged in, redirect to login
+    if (!currentUser) {
+        return redirect("/user/login");
+    }
 
     return (
         <Container>

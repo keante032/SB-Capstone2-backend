@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import useLocalStorage from "./helpers/useLocalStorage";
 import RecipeApi from "./helpers/api";
 import Navigation from "./navigation/Navigation";
-import PrivateRoute from "./navigation/PrivateRoute";
 import Home from "./routes/Home";
 import PublicRecipes from "./routes/PublicRecipes";
 import Register from "./routes/Register";
@@ -99,14 +98,14 @@ function App() {
                         <Route path="recipes">
                             <Route path="public" element={<PublicRecipes />} />
                             <Route path=":id" element={<RecipePage />} />
-                            <PrivateRoute path="search" element={<RecipeSearch />} />
-                            <PrivateRoute path="add" element={<RecipeNew addRecipe={addRecipe} />} />
-                            <PrivateRoute path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} />} />
+                            <Route path="search" element={<RecipeSearch />} />
+                            <Route path="add" element={<RecipeNew addRecipe={addRecipe} />} />
+                            <Route path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} />} />
                         </Route>
                         <Route path="user">
                             <Route path="register" element={<Register register={register} />} />
                             <Route path="login" element={<Login login={login} />} />
-                            <PrivateRoute path="dashboard" element={<Dashboard />} />
+                            <Route path="dashboard" element={<Dashboard />} />
                         </Route>
                     </Routes>
                 </RecipesContext.Provider>

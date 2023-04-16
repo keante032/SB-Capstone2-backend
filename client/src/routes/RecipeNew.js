@@ -1,8 +1,10 @@
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, redirect } from "react-router-dom";
+import { useState, useContext } from "react";
+import { UserContext } from "../App";
 
 export default function RecipeNew(addRecipe) {
+    const { currentUser } = useContext(UserContext);
     let navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -40,6 +42,11 @@ export default function RecipeNew(addRecipe) {
     function handleChange(evt) {
         const { name, value } = evt.target;
         setFormData(data => ({ ...data, [name]: value }));
+    }
+
+    // If no user logged in, redirect to login
+    if (!currentUser) {
+        return redirect("/user/login");
     }
 
     return (
