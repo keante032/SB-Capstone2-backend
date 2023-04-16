@@ -3,6 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useParams, redirect } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../App";
+import RecipeApi from "../helpers/api";
 
 export default async function RecipePage() {
     const { currentUser } = useContext(UserContext);

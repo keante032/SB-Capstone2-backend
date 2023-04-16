@@ -2,6 +2,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useContext } from "react";
 import { RecipesContext } from "../App";
+import RecipeApi from "../helpers/api";
 
 export default async function PublicRecipes() {
     const { recipes, setRecipes } = useContext(RecipesContext);
