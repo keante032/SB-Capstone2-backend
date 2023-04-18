@@ -93,11 +93,31 @@ class Recipe {
         const result = await db.query(
             `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description
             FROM recipes
-            WHERE name ILIKE %$1%
-            OR description ILIKE %$1%
-            OR ingredients::text ILIKE %$1%
-            OR directions::text ILIKE %$1%`,
-            [searchTerm]
+            WHERE name ILIKE $1
+            OR description ILIKE $1
+            OR ingredients::json#>'{0,item}' ILIKE $1
+            OR ingredients::json#>'{1,item}' ILIKE $1
+            OR ingredients::json#>'{2,item}' ILIKE $1
+            OR ingredients::json#>'{3,item}' ILIKE $1
+            OR ingredients::json#>'{4,item}' ILIKE $1
+            OR ingredients::json#>'{5,item}' ILIKE $1
+            OR ingredients::json#>'{6,item}' ILIKE $1
+            OR ingredients::json#>'{7,item}' ILIKE $1
+            OR ingredients::json#>'{8,item}' ILIKE $1
+            OR ingredients::json#>'{9,item}' ILIKE $1
+            OR ingredients::json#>'{10,item}' ILIKE $1
+            OR ingredients::json#>'{11,item}' ILIKE $1
+            OR ingredients::json#>'{12,item}' ILIKE $1
+            OR ingredients::json#>'{13,item}' ILIKE $1
+            OR ingredients::json#>'{14,item}' ILIKE $1
+            OR ingredients::json#>'{15,item}' ILIKE $1
+            OR ingredients::json#>'{16,item}' ILIKE $1
+            OR ingredients::json#>'{17,item}' ILIKE $1
+            OR ingredients::json#>'{18,item}' ILIKE $1
+            OR ingredients::json#>'{19,item}' ILIKE $1
+            OR ingredients::json#>'{20,item}' ILIKE $1
+            OR directions::text ILIKE $1`,
+            [`%${searchTerm}%`]
         );
         const recipes = result.rows;
 
