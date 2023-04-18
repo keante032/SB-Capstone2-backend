@@ -93,10 +93,10 @@ class Recipe {
         const result = await db.query(
             `SELECT id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description
             FROM recipes
-            WHERE name ILIKE $1
-            OR description ILIKE $1
-            OR ingredients::text ILIKE $1
-            OR directions::text ILIKE $1`,
+            WHERE name ILIKE %$1%
+            OR description ILIKE %$1%
+            OR ingredients::text ILIKE %$1%
+            OR directions::text ILIKE %$1%`,
             [searchTerm]
         );
         const recipes = result.rows;
