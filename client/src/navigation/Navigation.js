@@ -16,6 +16,9 @@ function Navigation({ logout }) {
                 <LinkContainer to="/user/dashboard">
                     <Nav.Link>Dashboard</Nav.Link>
                 </LinkContainer>
+                <LinkContainer to="/recipes/public">
+                    <Nav.Link>Public Recipes</Nav.Link>
+                </LinkContainer>
                 <LinkContainer to="/recipes/search">
                     <Nav.Link>Recipe Search</Nav.Link>
                 </LinkContainer>
