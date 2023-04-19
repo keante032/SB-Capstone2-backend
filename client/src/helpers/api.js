@@ -29,6 +29,7 @@ class RecipeApi {
     /** Get the current user. */
     static async getCurrentUser(username) {
         let res = await this.request(`users/${username}`);
+        console.log("Inside api.js getCurrentUser, res is: ", res);
         return res.user;
     }
 
@@ -76,7 +77,8 @@ class RecipeApi {
 
     /** Update existing recipe */
     static async updateRecipe(id, data) {
-        let res = await this.request(`recipes/${id}`, data, "put");
+        let res = await this.request(`recipes/${id}`, data, "patch");
+        console.log("Inside api.js updateRecipe, res is: ", res);
         return res.recipe;
     }
 

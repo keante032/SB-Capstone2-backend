@@ -86,12 +86,12 @@ router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res,
 });
 
 /** Update existing recipe
- * PUT /recipes/:id
+ * PATCH /recipes/:id
  * expects req.headers.authorization to be a valid token obtained from /auth/register or /auth/token
- * expects { publiclyShared, name, description, ingredients, directions }
+ * expects { publiclyShared, name, description, ingredients, directions }, but any not included will be left unchanged in the database
  * returns { recipe: { id, ownerId, publiclyShared, name, description, ingredients, directions } }
  */
-router.put("/:id", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
+router.patch("/:id", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
     try {
         const username = res.locals.user && res.locals.user.username;
         const { id } = req.params;

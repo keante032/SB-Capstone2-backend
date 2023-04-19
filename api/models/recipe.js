@@ -173,7 +173,47 @@ class Recipe {
     /**
      * Edit a recipe in the database
      */
-    static async edit(username, recipeId, { publiclyShared=false, name, description, ingredients, directions }) {
+    static async edit(username, recipeId, { publiclyShared=null, name=null, description=null, ingredients=null, directions=null }) {
+        // // find user in database
+        // const userResult = await db.query(
+        //     `SELECT id, username
+        //     FROM users
+        //     WHERE username = $1`,
+        //     [username]
+        // );
+        // const user = userResult.rows[0];
+
+        // // find recipe in database
+        // const result = await db.query(
+        //     `SELECT id, owner_id AS "ownerId"
+        //     FROM recipes
+        //     WHERE id = $1`,
+        //     [recipeId]
+        // );
+        // const recipe = result.rows[0];
+
+        // // check if user is not an admin and not the owner
+        // if (!user.isAdmin && recipe.ownerId !== user.id) {
+        //     throw new Error(`Unauthorized`);
+        // }
+
+        // // JSON.stringify the arrays so Postgres can store them as JSON
+        // ingredients = JSON.stringify(ingredients);
+        // directions = JSON.stringify(directions);
+
+        // // edit recipe in database
+        // const editResult = await db.query(
+        //     `UPDATE recipes
+        //     SET publicly_shared = $1, name = $2, description = $3, ingredients = $4, directions = $5
+        //     WHERE id = $6
+        //     RETURNING id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions`,
+        //     [publiclyShared, name, description, ingredients, directions, recipeId]
+        // );
+        // const editedRecipe = editResult.rows[0];
+
+        // return editedRecipe;
+
+        // refactor the above code so that it only updates the fields that are passed in
         // find user in database
         const userResult = await db.query(
             `SELECT id, username
@@ -198,13 +238,14 @@ class Recipe {
         }
 
         // JSON.stringify the arrays so Postgres can store them as JSON
-        ingredients = JSON.stringify(ingredients);
-        directions = JSON.stringify(directions);
+        // but only if they are not null
+        if (ingredients !== null) ingredients = JSON.stringify(ingredients);
+        if (directions !== null) directions = JSON.stringify(directions);
 
-        // edit recipe in database
+        // edit recipe in database, modifying only the fields that are passed in while leaving the others unchanged
         const editResult = await db.query(
             `UPDATE recipes
-            SET publicly_shared = $1, name = $2, description = $3, ingredients = $4, directions = $5
+            SET publicly_shared = COALESCE($1, publicly_shared), name = COALESCE($2, name), description = COALESCE($3, description), ingredients = COALESCE($4, ingredients), directions = COALESCE($5, directions)
             WHERE id = $6
             RETURNING id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions`,
             [publiclyShared, name, description, ingredients, directions, recipeId]
