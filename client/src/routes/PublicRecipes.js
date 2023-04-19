@@ -1,14 +1,24 @@
 import { Container, Row, Col, Button, CardGroup, Card } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { useContext } from "react";
-import { RecipesContext } from "../App";
+import { useState, useEffect } from "react";
 import RecipeApi from "../helpers/api";
 
-export default async function PublicRecipes() {
-    const { recipes, setRecipes } = useContext(RecipesContext);
+export default function PublicRecipes() {
+    const [recipes, setRecipes] = useState([]);
 
-    const results = await RecipeApi.getPublicRecipes();
-    setRecipes(results.recipes);
+    async function getPublicRecipes() {
+        try {
+            const results = await RecipeApi.getPublicRecipes();
+            console.log("RESULTS", results);
+            setRecipes(results);
+            return { success: true };
+        } catch (err) {
+            console.error("Search failed", err);
+            return { success: false, err };
+        }
+    }
+
+    useEffect(() => { getPublicRecipes() }, []);
 
     return (
         <Container>
@@ -17,7 +27,7 @@ export default async function PublicRecipes() {
                 <Col xs={10} md={6}>
                     <h1>Public Recipes</h1>
                     <CardGroup>
-                        {recipes.map(recipe => (
+                        {recipes && recipes.map(recipe => (
                             <Card key={recipe.id}>
                                 <Card.Body>
                                     <Card.Title>{recipe.name}</Card.Title>

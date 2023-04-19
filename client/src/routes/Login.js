@@ -13,6 +13,7 @@ export default function Login({ login }) {
     async function handleSubmit(evt) {
         evt.preventDefault();
         let result = await login(formData);
+        console.log("result", result)
         if (result.success) {
             navigate("/user/dashboard");
         } else {
@@ -34,11 +35,11 @@ export default function Login({ login }) {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="username">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" placeholder="Enter username" onChange={handleChange} />
+                            <Form.Control type="text" name="username" placeholder="Enter username" onChange={handleChange} />
                         </Form.Group>
                         <Form.Group controlId="password">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter password" onChange={handleChange} />
+                            <Form.Control type="password" name="password" placeholder="Enter password" onChange={handleChange} />
                         </Form.Group>
                         {formErrors.length
                             ? <Alert key="danger" variant="danger" >

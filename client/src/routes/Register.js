@@ -34,14 +34,14 @@ export default function Register({ register }) {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="username">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control type="text" placeholder="Enter username" onChange={handleChange} />
+                            <Form.Control type="text" name="username" placeholder="Enter username" onChange={handleChange} />
                             <Form.Text className="text-muted">
                                 We don't want to know your email. Just pick a username.
                             </Form.Text>
                         </Form.Group>
                         <Form.Group controlId="password">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter password" onChange={handleChange} />
+                            <Form.Control type="password" name="password" placeholder="Enter password" onChange={handleChange} />
                             <Form.Text className="text-muted">
                                 Make sure you keep your password safe. We don't know your email, so we can't help you reset it.
                             </Form.Text>

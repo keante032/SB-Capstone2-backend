@@ -1,21 +1,33 @@
 import { Container, Row, Col, Button, CardGroup, Card } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { redirect } from "react-router-dom";
-import { useContext } from "react";
-import { RecipesContext, UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
-export default async function Dashboard() {
+export default function Dashboard() {
+    let navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
-    const { recipes, setRecipes } = useContext(RecipesContext);
+    const [recipes, setRecipes] = useState([]);
 
-    const results = await RecipeApi.getMyRecipes();
-    setRecipes(results.recipes);
+    async function getMyRecipes() {
+        try {
+            const results = await RecipeApi.getMyRecipes();
+            console.log("RESULTS", results);
+            setRecipes(results);
+            return { success: true };
+        } catch (err) {
+            console.error("Search failed", err);
+            return { success: false, err };
+        }
+    }
+
+    useEffect(() => { getMyRecipes() }, [currentUser]);
+    
+    console.log("RECIPES", recipes);
 
     // If no user logged in, redirect to login
-    if (!currentUser) {
-        return redirect("/user/login");
-    }
+    if (!currentUser) navigate("/user/login");
 
     return (
         <Container>
@@ -24,7 +36,7 @@ export default async function Dashboard() {
                 <Col xs={10} md={6}>
                     <h1>Dashboard</h1>
                     <CardGroup>
-                        {recipes.map(recipe => (
+                        {recipes && recipes.map(recipe => (
                             <Card key={recipe.id}>
                                 <Card.Body>
                                     <Card.Title>{recipe.name}</Card.Title>

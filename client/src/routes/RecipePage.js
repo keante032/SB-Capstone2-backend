@@ -1,18 +1,34 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { useParams, redirect } from "react-router-dom";
-import { useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
-export default async function RecipePage() {
+export default function RecipePage() {
+    let navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
+    console.log("currentUser just retrieved from UserContext is...", currentUser);
     const { id } = useParams();
+    const [ recipe, setRecipe ] = useState({ publiclyShared: true, ingredients: [], directions: [] });
 
-    const recipe = await RecipeApi.getRecipe(id);
+    useEffect(() => {
+        async function getRecipe(id) {
+            try {
+                const result = await RecipeApi.getRecipe(id);
+                setRecipe(result);
+                return { success: true };
+            } catch (err) {
+                console.error("Search failed", err);
+                return { success: false, err };
+            }
+        }
+        getRecipe(id);
+    }, [id]);
 
     // If the recipe is private and the current user is not the owner, redirect to recipe search
-    if (!recipe.publiclyShared && currentUser.username !== recipe.ownerName) return redirect("/recipes/search");
+    if (!recipe.publiclyShared && currentUser?.username !== recipe.ownerName) navigate("/recipes/search");
+    console.log("username", currentUser?.username, "author", recipe.ownerName);
 
     return (
         <Container>
@@ -20,7 +36,7 @@ export default async function RecipePage() {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>{recipe.name}</h1>
-                    <h2>{recipe.ownerName}</h2>
+                    <h4>by {recipe.ownerName}</h4>
                     <p>{recipe.description}</p>
                     {currentUser && currentUser.username === recipe.ownerName && (
                         <LinkContainer to={`/recipes/edit/${id}`}>
@@ -29,14 +45,14 @@ export default async function RecipePage() {
                     )}
                     <h3>Ingredients</h3>
                     <ul>
-                        {recipe.ingredients.map(ingredient => (
-                            <li>{ingredient.count} {ingredient.unit} {ingredient.item}</li>
+                        {recipe.ingredients.map((ing, i) => (
+                            <li key={`ing-${i}`}>{ing}</li>
                         ))}
                     </ul>
                     <h3>Directions</h3>
                     <ol>
-                        {recipe.directions.map(direction => (
-                            <li>{direction}</li>
+                        {recipe.directions.map((dir, i) => (
+                            <li key={`dir-${i}`}>{dir}</li>
                         ))}
                     </ol>
                 </Col>

@@ -1,18 +1,19 @@
 import { Container, Row, Col, Button, Form, Alert, Card, CardGroup } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import { RecipesContext, UserContext } from "../App";
+import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
 export default function RecipeSearch() {
+    let navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
-    const { recipes, setRecipes } = useContext(RecipesContext);
+    const [recipes, setRecipes] = useState([]);
 
     async function findRecipes(data) {
         try {
             const results = await RecipeApi.findRecipes(data);
-            setRecipes(results.recipes);
+            setRecipes(results);
             return { success: true };
         } catch (err) {
             console.error("Search failed", err);
@@ -20,14 +21,12 @@ export default function RecipeSearch() {
         }
     };
 
-    const [formData, setFormData] = useState({
-        search: ""
-    });
+    const [formData, setFormData] = useState({ search: "" });
     const [formErrors, setFormErrors] = useState([]);
 
     async function handleSubmit(evt) {
         evt.preventDefault();
-        let result = await findRecipes(formData);
+        let result = await findRecipes(formData.search);
         if (!result.success) setFormErrors(result.err);
     }
 
@@ -37,14 +36,13 @@ export default function RecipeSearch() {
     }
 
     // If no user logged in, redirect to login
-    if (!currentUser) {
-        return redirect("/user/login");
-    }
+    if (!currentUser) navigate("/user/login");
 
     function renderRecipes() {
         return (
             <Row>
-                <Col>
+                <Col xs={1} md={2}></Col>
+                <Col xs={10} md={6}>
                     <CardGroup>
                         {recipes.map(recipe => (
                             <Card key={recipe.id}>
@@ -59,6 +57,7 @@ export default function RecipeSearch() {
                         ))}
                     </CardGroup>
                 </Col>
+                <Col xs={1} md={2}></Col>
             </Row>
         )
     };
@@ -71,8 +70,7 @@ export default function RecipeSearch() {
                     <h1>Recipe Search</h1>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="search">
-                            <Form.Label>Search</Form.Label>
-                            <Form.Control type="search" placeholder="Search for a recipe" onChange={handleChange} />
+                            <Form.Control type="search" name="search" placeholder="Search for a recipe" onChange={handleChange} />
                         </Form.Group>
                         {formErrors.length
                             ? <Alert key="danger" variant="danger" >
@@ -84,14 +82,14 @@ export default function RecipeSearch() {
                             </Alert>
                             : null
                         }
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" onSubmit={handleSubmit}>
                             Search
                         </Button>
                     </Form>
                 </Col>
                 <Col xs={1} md={2}></Col>
             </Row>
-            {recipes.length > 0 && renderRecipes()}
+            {recipes && recipes.length > 0 && renderRecipes()}
         </Container>
     )
 }

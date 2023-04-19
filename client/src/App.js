@@ -18,22 +18,23 @@ import RecipeNew from "./routes/RecipeNew";
 export const TOKEN_STORAGE_ID = "recipe-app-token"
 
 export const UserContext = createContext();
-export const RecipesContext = createContext();
 
 function App() {
     const [currentUser, setCurrentUser] = useState(null);
-    const [recipes, setRecipes] = useState(null);
     const [token, setToken] = useLocalStorage(TOKEN_STORAGE_ID);
 
     // whenever the token changes, setCurrentUser
-    useEffect(async function checkUser() {
+    useEffect(() => {
         if (token) {
             try {
                 let { username } = jwt.decode(token);
                 // put the token on the Api class so it can use it when calling the API.
                 RecipeApi.token = token;
-                let correctUser = await RecipeApi.getCurrentUser(username);
-                setCurrentUser(correctUser);
+                async function getCurrentUser(username) {
+                    let user = await RecipeApi.getCurrentUser(username);
+                    setCurrentUser(user);
+                }
+                getCurrentUser(username);
             } catch (err) {
                 console.error("Problem checking user", err);
                 setCurrentUser(null);
@@ -91,24 +92,22 @@ function App() {
     return (
         <BrowserRouter>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-                <RecipesContext.Provider value={{ recipes, setRecipes }}>
-                    <Navigation logout={logout} />
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="recipes">
-                            <Route path="public" element={<PublicRecipes />} />
-                            <Route path=":id" element={<RecipePage />} />
-                            <Route path="search" element={<RecipeSearch />} />
-                            <Route path="add" element={<RecipeNew addRecipe={addRecipe} />} />
-                            <Route path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} />} />
-                        </Route>
-                        <Route path="user">
-                            <Route path="register" element={<Register register={register} />} />
-                            <Route path="login" element={<Login login={login} />} />
-                            <Route path="dashboard" element={<Dashboard />} />
-                        </Route>
-                    </Routes>
-                </RecipesContext.Provider>
+                <Navigation logout={logout} />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="recipes">
+                        <Route path="public" element={<PublicRecipes />} />
+                        <Route path=":id" element={<RecipePage />} />
+                        <Route path="search" element={<RecipeSearch />} />
+                        <Route path="add" element={<RecipeNew addRecipe={addRecipe} />} />
+                        <Route path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} />} />
+                    </Route>
+                    <Route path="user">
+                        <Route path="register" element={<Register register={register} />} />
+                        <Route path="login" element={<Login login={login} />} />
+                        <Route path="dashboard" element={<Dashboard />} />
+                    </Route>
+                </Routes>
             </UserContext.Provider>
         </BrowserRouter>
     );

@@ -1,43 +1,50 @@
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
-import { useParams, useNavigate, redirect } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
-export default async function RecipeEdit(editRecipe) {
+export default function RecipeEdit({editRecipe}) {
     const { currentUser } = useContext(UserContext);
     const { id } = useParams();
     let navigate = useNavigate();
-
-    const recipe = await RecipeApi.getRecipe(id);
-
+    const [recipe, setRecipe] = useState(null);
     const [formData, setFormData] = useState({
-        name: recipe.name,
-        publiclyShared: recipe.publiclyShared,
-        description: recipe.description,
-        // change ingredients from array of objects to multiline string
-        ingredients: recipe.ingredients.map(i => (`${i.count} ${i.unit} ${i.item}`)).join("\n"),
-        // change directions from array of strings to multiline string
-        directions: recipe.directions.join("\n")
+        name: "",
+        publiclyShared: true,
+        description: "",
+        ingredients: "",
+        directions: ""
     });
     const [formErrors, setFormErrors] = useState([]);
 
+    useEffect(() => {
+        // fetch recipe data and set initial form data
+        async function getRecipe(id) {
+            const result = await RecipeApi.getRecipe(id);
+            setRecipe(result);
+            setFormData({
+                name: result.name,
+                publiclyShared: result.publiclyShared,
+                description: result.description,
+                ingredients: result.ingredients.join("\n"),
+                directions: result.directions.join("\n")
+            });
+        };
+
+        getRecipe(id);
+    }, [id]);
+
     async function handleSubmit(evt) {
         evt.preventDefault();
+        console.log("formData", formData)
         let submitData = { ...formData };
         // change ingredients from multiline string to array of strings
         submitData.ingredients = submitData.ingredients.split("\n");
-        // split each ingredient into count, unit, and item
-        submitData.ingredients = submitData.ingredients.map(ingredient => {
-            let ingredientData = ingredient.split(" ");
-            let count = ingredientData[0];
-            let unit = ingredientData[1];
-            let item = ingredientData.slice(2).join(" ");
-            return { count, unit, item };
-        });
         // change directions from multiline string to array of strings
         submitData.directions = submitData.directions.split("\n");
-        let result = await editRecipe(submitData);
+        console.log("submitData", submitData)
+        let result = await editRecipe(id, submitData);
         if (result.success) {
             navigate(`/recipes/${id}`);
         } else {
@@ -50,13 +57,18 @@ export default async function RecipeEdit(editRecipe) {
         setFormData(data => ({ ...data, [name]: value }));
     }
 
+    function handleCheck(evt) {
+        const { name, checked } = evt.target;
+        setFormData(data => ({ ...data, [name]: checked }));
+    }
+
     // If no user logged in, redirect to login
     if (!currentUser) {
-        return redirect("/user/login");
+        navigate("/user/login");
     }
 
     // If the current user is not the owner, redirect to recipe search
-    if (currentUser.username !== recipe.ownerName) return redirect("/recipes/search");
+    if (recipe && recipe.ownerName && (recipe.ownerName !== currentUser.username)) navigate("/recipes/search");
 
     return (
         <Container>
@@ -67,22 +79,22 @@ export default async function RecipeEdit(editRecipe) {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="name">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" onChange={handleChange} />
+                            <Form.Control type="text" name="name" onChange={handleChange} defaultValue={formData.name} />
                         </Form.Group>
                         <Form.Group controlId="publiclyShared">
-                            <Form.Check type="checkbox" label="Share publicly?" onChange={handleChange} />
+                            <Form.Check type="checkbox" name="publiclyShared" label="Share publicly?" onChange={handleCheck} checked={formData.publiclyShared} />
                         </Form.Group>
                         <Form.Group controlId="description">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control type="text" onChange={handleChange} />
+                            <Form.Control type="text" name="description" onChange={handleChange} defaultValue={formData.description} />
                         </Form.Group>
                         <Form.Group controlId="ingredients">
                             <Form.Label>Ingredients</Form.Label>
-                            <Form.Control type="text" onChange={handleChange} />
+                            <Form.Control as="textarea" rows={6} name="ingredients" onChange={handleChange} defaultValue={formData.ingredients} />
                         </Form.Group>
                         <Form.Group controlId="directions">
                             <Form.Label>Directions</Form.Label>
-                            <Form.Control type="text" onChange={handleChange} />
+                            <Form.Control as="textarea" rows={6} name="directions" onChange={handleChange} defaultValue={formData.directions} />
                         </Form.Group>
                         {formErrors.length
                             ? <Alert key="danger" variant="danger" >
