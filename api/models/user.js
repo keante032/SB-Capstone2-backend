@@ -32,7 +32,6 @@ class User {
         }
 
         // if we get here, then one or both of the username and the password must have been incorrect
-        // TODO: determine if this basic error is okay, or should do something fancier with some error classes
         throw new Error('Invalid username or password');
     }
 
