@@ -17,14 +17,6 @@ app.use("/auth", authRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/users", usersRoutes);
 
-// /** Avoid CORS issues */
-// app.use(function (req, res, next) {
-//     // TODO: update '*' to match the domain of deployed frontend
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     next();
-// });
-
 /** Handle 404 errors for everything that doesn't match a route */
 app.use(function (req, res, next) {
     return next(new Error("Not Found"));
