@@ -2,7 +2,7 @@ const express = require("express");
 
 const Recipe = require("../models/recipe");
 const { ensureLoggedIn } = require("../middleware/auth");
-const { validateRecipeSchema } = require("../middleware/schemaValidator");
+const { validateNewRecipeSchema, validateEditRecipeSchema } = require("../middleware/schemaValidator");
 
 const router = new express.Router();
 
@@ -75,7 +75,7 @@ router.get("/:id", async function (req, res, next) {
  * expects { publiclyShared, name, description, ingredients, directions }
  * returns { recipe: { id, ownerId, publiclyShared, name, description, ingredients, directions } }
  */
-router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
+router.post("/", ensureLoggedIn, validateNewRecipeSchema, async function (req, res, next) {
     try {
         const username = res.locals.user && res.locals.user.username;
         const recipe = await Recipe.add(username, req.body);
@@ -91,7 +91,7 @@ router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res,
  * expects { publiclyShared, name, description, ingredients, directions }, but any not included will be left unchanged in the database
  * returns { recipe: { id, ownerId, publiclyShared, name, description, ingredients, directions } }
  */
-router.patch("/:id", ensureLoggedIn, validateRecipeSchema, async function (req, res, next) {
+router.patch("/:id", ensureLoggedIn, validateEditRecipeSchema, async function (req, res, next) {
     try {
         const username = res.locals.user && res.locals.user.username;
         const { id } = req.params;
