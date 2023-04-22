@@ -8,7 +8,6 @@ import RecipeApi from "../helpers/api";
 export default function RecipePage() {
     let navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
-    console.log("currentUser just retrieved from UserContext is...", currentUser);
     const { id } = useParams();
     const [ recipe, setRecipe ] = useState({ publiclyShared: true, ingredients: [], directions: [] });
 
@@ -28,7 +27,6 @@ export default function RecipePage() {
 
     // If the recipe is private and the current user is not the owner, redirect to recipe search
     if (!recipe.publiclyShared && currentUser?.username !== recipe.ownerName) navigate("/recipes/search");
-    console.log("username", currentUser?.username, "author", recipe.ownerName);
 
     return (
         <Container>

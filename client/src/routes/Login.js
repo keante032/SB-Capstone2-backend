@@ -13,7 +13,6 @@ export default function Login({ login }) {
     async function handleSubmit(evt) {
         evt.preventDefault();
         let result = await login(formData);
-        console.log("result", result)
         if (result.success) {
             navigate("/user/dashboard");
         } else {

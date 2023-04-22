@@ -9,7 +9,6 @@ export default function PublicRecipes() {
     async function getPublicRecipes() {
         try {
             const results = await RecipeApi.getPublicRecipes();
-            console.log("RESULTS", results);
             setRecipes(results);
             return { success: true };
         } catch (err) {

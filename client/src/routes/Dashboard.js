@@ -13,7 +13,6 @@ export default function Dashboard() {
     async function getMyRecipes() {
         try {
             const results = await RecipeApi.getMyRecipes();
-            console.log("RESULTS", results);
             setRecipes(results);
             return { success: true };
         } catch (err) {
@@ -23,8 +22,6 @@ export default function Dashboard() {
     }
 
     useEffect(() => { getMyRecipes() }, [currentUser]);
-    
-    console.log("RECIPES", recipes);
 
     // If no user logged in, redirect to login
     if (!currentUser) navigate("/user/login");
