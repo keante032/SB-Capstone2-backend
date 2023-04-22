@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
-export default function RecipeEdit({editRecipe}) {
+export default function RecipeEdit({editRecipe, deleteRecipe}) {
     const { currentUser } = useContext(UserContext);
     const { id } = useParams();
     let navigate = useNavigate();
@@ -37,16 +37,24 @@ export default function RecipeEdit({editRecipe}) {
 
     async function handleSubmit(evt) {
         evt.preventDefault();
-        console.log("formData", formData)
         let submitData = { ...formData };
         // change ingredients from multiline string to array of strings
         submitData.ingredients = submitData.ingredients.split("\n");
         // change directions from multiline string to array of strings
         submitData.directions = submitData.directions.split("\n");
-        console.log("submitData", submitData)
         let result = await editRecipe(id, submitData);
         if (result.success) {
             navigate(`/recipes/${id}`);
+        } else {
+            setFormErrors(result.err);
+        }
+    }
+
+    async function handleDelete(evt) {
+        evt.preventDefault();
+        let result = await deleteRecipe(id);
+        if (result.success) {
+            navigate("/user/dashboard");
         } else {
             setFormErrors(result.err);
         }
@@ -108,6 +116,9 @@ export default function RecipeEdit({editRecipe}) {
                         }
                         <Button variant="primary" type="submit" onSubmit={handleSubmit}>
                             Save Changes
+                        </Button>
+                        <Button variant="danger" onClick={handleDelete}>
+                            Delete Recipe
                         </Button>
                     </Form>
                 </Col>

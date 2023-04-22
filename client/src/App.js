@@ -71,7 +71,7 @@ function App() {
 
     async function editRecipe(id, data) {
         try {
-            let recipe = await RecipeApi.updateRecipe(id, data);
+            await RecipeApi.updateRecipe(id, data);
             return { success: true };
         } catch (err) {
             console.error("Update failed", err);
@@ -89,6 +89,16 @@ function App() {
         }
     }
 
+    async function deleteRecipe(id) {
+        try {
+            await RecipeApi.deleteRecipe(id);
+            return { success: true };
+        } catch (err) {
+            console.error("Delete failed", err);
+            return { success: false, err };
+        }
+    }
+
     return (
         <BrowserRouter>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
@@ -100,7 +110,7 @@ function App() {
                         <Route path=":id" element={<RecipePage />} />
                         <Route path="search" element={<RecipeSearch />} />
                         <Route path="add" element={<RecipeNew addRecipe={addRecipe} />} />
-                        <Route path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} />} />
+                        <Route path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} deleteRecipe={deleteRecipe} />} />
                     </Route>
                     <Route path="user">
                         <Route path="register" element={<Register register={register} />} />
