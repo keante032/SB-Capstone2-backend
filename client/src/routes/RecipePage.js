@@ -5,7 +5,7 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../App";
 import RecipeApi from "../helpers/api";
 
-export default function RecipePage() {
+export default function RecipePage({copyRecipe}) {
     let navigate = useNavigate();
     const { currentUser } = useContext(UserContext);
     const { id } = useParams();
@@ -28,6 +28,22 @@ export default function RecipePage() {
     // If the recipe is private and the current user is not the owner, redirect to recipe search
     if (!recipe.publiclyShared && currentUser?.username !== recipe.ownerName) navigate("/recipes/search");
 
+    async function handleCopy(evt) {
+        evt.preventDefault();
+        let result = await copyRecipe({
+            name: recipe.name,
+            publiclyShared: false,
+            description: recipe.description,
+            ingredients: recipe.ingredients,
+            directions: recipe.directions
+        });
+        if (result.success) {
+            navigate("/user/dashboard");
+        } else {
+            setFormErrors(result.err);
+        }
+    }
+
     return (
         <Container>
             <Row>
@@ -40,6 +56,11 @@ export default function RecipePage() {
                         <LinkContainer to={`/recipes/edit/${id}`}>
                             <Button variant="primary">Edit Recipe</Button>
                         </LinkContainer>
+                    )}
+                    {currentUser && currentUser.username !== recipe.ownerName && (
+                        <Button variant="secondary" onClick={handleCopy}>
+                            Copy Recipe
+                        </Button>
                     )}
                     <h3>Ingredients</h3>
                     <ul>

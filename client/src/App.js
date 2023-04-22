@@ -107,7 +107,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="recipes">
                         <Route path="public" element={<PublicRecipes />} />
-                        <Route path=":id" element={<RecipePage />} />
+                        <Route path=":id" element={<RecipePage copyRecipe={addRecipe} />} />
                         <Route path="search" element={<RecipeSearch />} />
                         <Route path="add" element={<RecipeNew addRecipe={addRecipe} />} />
                         <Route path="edit/:id" element={<RecipeEdit editRecipe={editRecipe} deleteRecipe={deleteRecipe} />} />
