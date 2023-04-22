@@ -1,10 +1,11 @@
 const express = require("express");
-const morgan = require('morgan');
-const cors = require('cors');
+const morgan = require("morgan");
+const cors = require("cors");
 const { authenticateJWT } = require("./middleware/auth");
 const authRoutes = require("./routes/auth");
 const recipesRoutes = require("./routes/recipes");
 const usersRoutes = require("./routes/users");
+const { NotFoundError } = require("./helpers/errorWithStatusCode")
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use("/users", usersRoutes);
 
 /** Handle 404 errors for everything that doesn't match a route */
 app.use(function (req, res, next) {
-    return next(new Error("Not Found"));
+    return next(new NotFoundError());
 });
 
 /** Generic error handler; anything unhandled goes here. */
