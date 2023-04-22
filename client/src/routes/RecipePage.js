@@ -39,8 +39,6 @@ export default function RecipePage({copyRecipe}) {
         });
         if (result.success) {
             navigate("/user/dashboard");
-        } else {
-            setFormErrors(result.err);
         }
     }
 
