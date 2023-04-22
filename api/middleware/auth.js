@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
+const { UnauthorizedError } = require("../helpers/errorWithStatusCode");
 
 /**
  * Verify token and, if valid, store its payload (username and isAdmin) on res.locals.
@@ -23,7 +24,7 @@ function authenticateJWT(req, res, next) {
 
 function ensureLoggedIn(req, res, next) {
     try {
-        if (!res.locals.user) throw new Error("Unauthorized");
+        if (!res.locals.user) throw new UnauthorizedError();
         return next();
     } catch (err) {
         return next(err);
@@ -34,7 +35,7 @@ function ensureCorrectUserOrAdmin(req, res, next) {
     try {
         const user = res.locals.user;
         if (!(user && (user.isAdmin || user.username === req.params.username))) {
-            throw new Error("Unauthorized");
+            throw new UnauthorizedError();
         }
         return next();
     } catch (err) {
