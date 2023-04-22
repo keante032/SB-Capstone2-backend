@@ -3,7 +3,7 @@ import { useNavigate, redirect } from "react-router-dom";
 import { useState, useContext } from "react";
 import { UserContext } from "../App";
 
-export default function RecipeNew(addRecipe) {
+export default function RecipeNew({addRecipe}) {
     const { currentUser } = useContext(UserContext);
     let navigate = useNavigate();
 
