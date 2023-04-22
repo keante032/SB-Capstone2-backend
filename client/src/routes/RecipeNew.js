@@ -21,14 +21,6 @@ export default function RecipeNew(addRecipe) {
         let submitData = { ...formData };
         // change ingredients from multiline string to array of strings
         submitData.ingredients = submitData.ingredients.split("\n");
-        // split each ingredient into count, unit, and item
-        submitData.ingredients = submitData.ingredients.map(ingredient => {
-            let ingredientData = ingredient.split(" ");
-            let count = ingredientData[0];
-            let unit = ingredientData[1];
-            let item = ingredientData.slice(2).join(" ");
-            return { count, unit, item };
-        });
         // change directions from multiline string to array of strings
         submitData.directions = submitData.directions.split("\n");
         let result = await addRecipe(submitData);
@@ -42,6 +34,11 @@ export default function RecipeNew(addRecipe) {
     function handleChange(evt) {
         const { name, value } = evt.target;
         setFormData(data => ({ ...data, [name]: value }));
+    }
+
+    function handleCheck(evt) {
+        const { name, checked } = evt.target;
+        setFormData(data => ({ ...data, [name]: checked }));
     }
 
     // If no user logged in, redirect to login
@@ -58,22 +55,22 @@ export default function RecipeNew(addRecipe) {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="name">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" placeholder="My Favorite Recipe" onChange={handleChange} />
+                            <Form.Control type="text" name="name" placeholder="My Favorite Recipe" onChange={handleChange} />
                         </Form.Group>
                         <Form.Group controlId="publiclyShared">
-                            <Form.Check type="checkbox" label="Share publicly?" onChange={handleChange} />
+                            <Form.Check type="checkbox" name="publiclyShared" label="Share publicly?" onChange={handleCheck} />
                         </Form.Group>
                         <Form.Group controlId="description">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control type="text" placeholder="Yeah, this one is my favorite." onChange={handleChange} />
+                            <Form.Control type="text" name="description" placeholder="Yeah, this one is my favorite." onChange={handleChange} />
                         </Form.Group>
                         <Form.Group controlId="ingredients">
                             <Form.Label>Ingredients</Form.Label>
-                            <Form.Control type="textarea" placeholder="2 slices bread" onChange={handleChange} />
+                            <Form.Control as="textarea" rows={6} name="ingredients" placeholder="2 slices bread" onChange={handleChange} />
                         </Form.Group>
                         <Form.Group controlId="directions">
                             <Form.Label>Directions</Form.Label>
-                            <Form.Control type="textarea" placeholder="Enter directions" onChange={handleChange} />
+                            <Form.Control as="textarea" rows={6} name="directions" placeholder="Enter directions" onChange={handleChange} />
                         </Form.Group>
                         {formErrors.length
                             ? <Alert key="danger" variant="danger" >
