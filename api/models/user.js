@@ -1,6 +1,7 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
+const { BadRequestError, UnauthorizedError } = require("../helpers/errorWithStatusCode.js");
 
 /**
  * User model has static methods that handle communicating with PostgreSQL
@@ -32,7 +33,7 @@ class User {
         }
 
         // if we get here, then one or both of the username and the password must have been incorrect
-        throw new Error('Invalid username or password');
+        throw new UnauthorizedError('Invalid username or password');
     }
 
     /**
@@ -46,7 +47,7 @@ class User {
             WHERE username = $1`,
             [username]
         );
-        if (checkForDuplicate.rows[0]) throw new Error('That username already exists.')
+        if (checkForDuplicate.rows[0]) throw new BadRequestError('That username already exists.')
 
         const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
@@ -77,7 +78,7 @@ class User {
         const user = result.rows[0];
 
         // if user not found, throw error
-        if (!user) throw new Error(`No user: ${username}`);
+        if (!user) throw new NotFoundError(`No user: ${username}`);
 
         // else return user object
         // { id, username, isAdmin }
@@ -85,40 +86,10 @@ class User {
     }
 
     // I am leaving out an update method for now
-    // I can add it later if I want to allow users to change their username, email, or password
+    // I can add it later if I want to allow users to change their username or password
 
     // I am leaving out a delete method for now
     // I can add it later if I want to allow users to delete their accounts
-
-    /**
-     * Save a recipe to the user's list of saved recipes
-     */
-    static async saveRecipe(username, recipeId) {
-        // find user in database
-        const result = await db.query(
-            `SELECT id
-            FROM users
-            WHERE username = $1`,
-            [username]
-        );
-        const user = result.rows[0];
-
-        // if user not found, throw error
-        if (!user) throw new Error(`No user: ${username}`);
-
-        // add new row to saves table
-        const saveResult = await db.query(
-            `INSERT INTO saves
-            (user_id, recipe_id)
-            VALUES ($1, $2)
-            RETURNING id`,
-            [user.id, recipeId]
-        );
-        const save = saveResult.rows[0];
-
-        // return save object
-        return save;
-    }
 }
 
 module.exports = User;
