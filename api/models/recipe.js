@@ -1,4 +1,5 @@
 const db = require("../db");
+const { NotFoundError, UnauthorizedError } = require("../helpers/errorWithStatusCode");
 
 /**
  * Recipe model has static methods that handle communicating with PostgreSQL to make changes to the recipes table
@@ -141,6 +142,10 @@ class Recipe {
             [recipeId]
         );
         const recipe = result.rows[0];
+
+        // if recipe is not found, throw error
+        if (!recipe) throw new NotFoundError(`No recipe found with id ${recipeId}`);
+
         const nameResult = await db.query(
             `SELECT username
             FROM users
@@ -161,7 +166,7 @@ class Recipe {
 
             // check if user is not an admin and not the owner
             if (!user || (!user.isAdmin && recipe.ownerId !== user.id)) {
-                throw new Error(`Unauthorized`);
+                throw new UnauthorizedError();
             }
         }
 
@@ -174,46 +179,6 @@ class Recipe {
      * Edit a recipe in the database
      */
     static async edit(username, recipeId, { publiclyShared=null, name=null, description=null, ingredients=null, directions=null }) {
-        // // find user in database
-        // const userResult = await db.query(
-        //     `SELECT id, username
-        //     FROM users
-        //     WHERE username = $1`,
-        //     [username]
-        // );
-        // const user = userResult.rows[0];
-
-        // // find recipe in database
-        // const result = await db.query(
-        //     `SELECT id, owner_id AS "ownerId"
-        //     FROM recipes
-        //     WHERE id = $1`,
-        //     [recipeId]
-        // );
-        // const recipe = result.rows[0];
-
-        // // check if user is not an admin and not the owner
-        // if (!user.isAdmin && recipe.ownerId !== user.id) {
-        //     throw new Error(`Unauthorized`);
-        // }
-
-        // // JSON.stringify the arrays so Postgres can store them as JSON
-        // ingredients = JSON.stringify(ingredients);
-        // directions = JSON.stringify(directions);
-
-        // // edit recipe in database
-        // const editResult = await db.query(
-        //     `UPDATE recipes
-        //     SET publicly_shared = $1, name = $2, description = $3, ingredients = $4, directions = $5
-        //     WHERE id = $6
-        //     RETURNING id, owner_id AS "ownerId", publicly_shared AS "publiclyShared", name, description, ingredients, directions`,
-        //     [publiclyShared, name, description, ingredients, directions, recipeId]
-        // );
-        // const editedRecipe = editResult.rows[0];
-
-        // return editedRecipe;
-
-        // refactor the above code so that it only updates the fields that are passed in
         // find user in database
         const userResult = await db.query(
             `SELECT id, username
@@ -234,7 +199,7 @@ class Recipe {
 
         // check if user is not an admin and not the owner
         if (!user.isAdmin && recipe.ownerId !== user.id) {
-            throw new Error(`Unauthorized`);
+            throw new UnauthorizedError();
         }
 
         // JSON.stringify the arrays so Postgres can store them as JSON
@@ -279,7 +244,7 @@ class Recipe {
 
         // check if user is not an admin and not the owner
         if (!user.isAdmin && recipe.ownerId !== user.id) {
-            throw new Error(`Unauthorized`);
+            throw new UnauthorizedError();
         }
 
         // delete recipe from database
