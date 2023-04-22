@@ -3,6 +3,7 @@
 const jsonschema = require("jsonschema");
 const userAuthSchema = require("../schemas/userAuth.json");
 const recipeSchema = require("../schemas/recipe.json");
+const { BadRequestError } = require("../helpers/errorWithStatusCode");
 
 function validateUserAuthSchema(req, res, next) {
     const validator = jsonschema.validate(req.body, userAuthSchema);
@@ -19,8 +20,7 @@ function validateRecipeSchema(req, res, next) {
     const validator = jsonschema.validate(req.body, recipeSchema);
     if (!validator.valid) {
         let listOfErrors = validator.errors.map(error => error.stack);
-        let error = new Error(listOfErrors);
-        error.status = 400;
+        let error = new BadRequestError(listOfErrors);
         return next(error);
     }
     next();
