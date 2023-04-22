@@ -12,7 +12,7 @@ const router = new express.Router();
  * but the search will still work without a valid token, only returning public recipes in that case
  * returns { recipes: [{ id, ownerId, publiclyShared, name, description }, ...] }
  */
-router.get("/search/:searchTerm", async function (req, res, next) {
+router.get("/search/:searchTerm", ensureLoggedIn, async function (req, res, next) {
     try {
         const username = res.locals.user && res.locals.user.username;
         const { searchTerm } = req.params;
