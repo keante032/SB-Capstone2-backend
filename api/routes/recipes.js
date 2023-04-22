@@ -79,7 +79,7 @@ router.post("/", ensureLoggedIn, validateRecipeSchema, async function (req, res,
     try {
         const username = res.locals.user && res.locals.user.username;
         const recipe = await Recipe.add(username, req.body);
-        return res.json({ recipe });
+        return res.status(201).json({ recipe });
     } catch (err) {
         return next(err);
     }
