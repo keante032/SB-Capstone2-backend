@@ -32,6 +32,9 @@ export default function Dashboard() {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>Dashboard</h1>
+                    {recipes.length === 0 && (
+                        <p>You haven't added any recipes yet!</p>
+                    )}
                     <CardGroup>
                         {recipes && recipes.map(recipe => (
                             <Card key={recipe.id}>
