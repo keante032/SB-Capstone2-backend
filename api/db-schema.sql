@@ -15,11 +15,3 @@ CREATE TABLE recipes (
     ingredients JSONB NOT NULL,
     directions JSONB NOT NULL
 );
-
-CREATE TABLE saves (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER
-        REFERENCES users ON DELETE CASCADE,
-    recipe_id INTEGER
-        REFERENCES recipes ON DELETE CASCADE
-);

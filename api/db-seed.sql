@@ -12,17 +12,9 @@ VALUES (
     'PBJ',
     'A classic peanut butter & jelly sandwich.',
     '[
-        {
-            "item": "bread",
-            "count": 2,
-            "unit": "slices"
-        },
-        {
-            "item": "peanut butter"
-        },
-        {
-            "item": "jelly"
-        }
+        "2 slices of bread",
+        "peanut butter",
+        "jelly"
     ]',
     '[
         "Spread the peanut butter on one slice of bread.",
@@ -36,47 +28,15 @@ VALUES (
     'Taco Pie',
     'I learned this one from my grandma.',
     '[
-        {
-            "item": "ground beef",
-            "count": 1,
-            "unit": "pound"
-        },
-        {
-            "item": "taco seasoning",
-            "count": 1,
-            "unit": "packet"
-        },
-        {
-            "item": "water",
-            "count": 0.5,
-            "unit": "cup"
-        },
-        {
-            "item": "sour cream",
-            "count": 1,
-            "unit": "cup"
-        },
-        {
-            "item": "shredded cheddar cheese",
-            "count": 1,
-            "unit": "cup"
-        },
-        {
-            "item": "crushed taco chips",
-            "count": 2,
-            "unit": "cups"
-        },
-        {
-            "item": "crescent rolls",
-            "count": 1,
-            "unit": "8-ounce can"
-        },
-        {
-            "item": "lettuce"
-        },
-        {
-            "item": "taco sauce"
-        }
+        "1 pound ground beef",
+        "1 packet taco seasoning",
+        "0.5 cup water",
+        "1 cup sour cream",
+        "1 cup shredded cheddar cheese",
+        "2 cups crushed taco chips",
+        "1 8-ounce can crescent rolls",
+        "lettuce",
+        "taco sauce"
     ]',
     '[
         "Brown the ground beef. Drain the fat if you like, or not.",
