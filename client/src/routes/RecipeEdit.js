@@ -84,6 +84,7 @@ export default function RecipeEdit({editRecipe, deleteRecipe}) {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>Edit Recipe</h1>
+                    <br />
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="name">
                             <Form.Label>Name</Form.Label>
@@ -114,12 +115,15 @@ export default function RecipeEdit({editRecipe, deleteRecipe}) {
                             </Alert>
                             : null
                         }
-                        <Button variant="primary" type="submit" onSubmit={handleSubmit}>
-                            Save Changes
-                        </Button>
-                        <Button variant="danger" onClick={handleDelete}>
-                            Delete Recipe
-                        </Button>
+                        <br />
+                        <div class="d-flex justify-content-between">
+                            <Button variant="primary" type="submit" onSubmit={handleSubmit}>
+                                Save Changes
+                            </Button>
+                            <Button variant="danger" onClick={handleDelete}>
+                                Delete Recipe
+                            </Button>
+                        </div>
                     </Form>
                 </Col>
                 <Col xs={1} md={2}></Col>

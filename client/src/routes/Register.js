@@ -31,6 +31,7 @@ export default function Register({ register }) {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>Register</h1>
+                    <br />
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="username">
                             <Form.Label>Username</Form.Label>

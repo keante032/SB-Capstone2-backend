@@ -17,13 +17,13 @@ function Navigation({ logout }) {
                     <Nav.Link>Dashboard</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/recipes/add">
-                    <Nav.Link>Add New Recipe</Nav.Link>
+                    <Nav.Link>New</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/recipes/public">
                     <Nav.Link>Public Recipes</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/recipes/search">
-                    <Nav.Link>Recipe Search</Nav.Link>
+                    <Nav.Link>Search</Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/">
                     <Nav.Link onClick={logout}>Log out {currentUser.username}</Nav.Link>
