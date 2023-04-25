@@ -51,6 +51,7 @@ export default function Login({ login }) {
                             </Alert>
                             : null
                         }
+                        <br />
                         <Button variant="primary" type="submit" onSubmit={handleSubmit}>
                             Login
                         </Button>

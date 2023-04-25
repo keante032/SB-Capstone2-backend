@@ -57,6 +57,7 @@ export default function Register({ register }) {
                             </Alert>
                             : null
                         }
+                        <br />
                         <Button variant="primary" type="submit" onSubmit={handleSubmit}>
                             Register
                         </Button>
