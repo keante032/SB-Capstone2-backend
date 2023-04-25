@@ -103,6 +103,7 @@ function App() {
         <BrowserRouter>
             <UserContext.Provider value={{ currentUser, setCurrentUser }}>
                 <Navigation logout={logout} />
+                <br />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="recipes">

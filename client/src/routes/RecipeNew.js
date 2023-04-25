@@ -52,6 +52,7 @@ export default function RecipeNew({addRecipe}) {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>New Recipe</h1>
+                    <br />
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="name">
                             <Form.Label>Name</Form.Label>
@@ -82,6 +83,7 @@ export default function RecipeNew({addRecipe}) {
                             </Alert>
                             : null
                         }
+                        <br />
                         <Button variant="primary" type="submit" onSubmit={handleSubmit}>
                             Submit
                         </Button>

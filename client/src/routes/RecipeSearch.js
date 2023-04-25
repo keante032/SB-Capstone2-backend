@@ -43,19 +43,21 @@ export default function RecipeSearch() {
             <Row>
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
-                    <CardGroup>
+                    <Row xs={2} sm={3} className="g-4">
                         {recipes.map(recipe => (
-                            <Card key={recipe.id}>
-                                <Card.Body>
-                                    <Card.Title>{recipe.name}</Card.Title>
-                                    <Card.Text>{recipe.description}</Card.Text>
-                                </Card.Body>
-                                <LinkContainer to={`/recipes/${recipe.id}`}>
-                                    <Button variant="primary">View Recipe</Button>
-                                </LinkContainer>
-                            </Card>
+                            <Col>
+                                <Card key={recipe.id} className="h-100">
+                                    <Card.Body>
+                                        <Card.Title>{recipe.name}</Card.Title>
+                                        <Card.Text>{recipe.description}</Card.Text>
+                                    </Card.Body>
+                                    <LinkContainer to={`/recipes/${recipe.id}`}>
+                                        <Button variant="primary">View Recipe</Button>
+                                    </LinkContainer>
+                                </Card>
+                            </Col>
                         ))}
-                    </CardGroup>
+                    </Row>
                 </Col>
                 <Col xs={1} md={2}></Col>
             </Row>
@@ -68,6 +70,7 @@ export default function RecipeSearch() {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>Recipe Search</h1>
+                    <br />
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="search">
                             <Form.Control type="search" name="search" placeholder="Search for a recipe" onChange={handleChange} />
@@ -82,6 +85,7 @@ export default function RecipeSearch() {
                             </Alert>
                             : null
                         }
+                        <br />
                         <Button variant="primary" type="submit" onSubmit={handleSubmit}>
                             Search
                         </Button>

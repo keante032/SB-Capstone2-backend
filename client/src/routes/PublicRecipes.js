@@ -25,19 +25,22 @@ export default function PublicRecipes() {
                 <Col xs={1} md={2}></Col>
                 <Col xs={10} md={6}>
                     <h1>Public Recipes</h1>
-                    <CardGroup>
+                    <br />
+                    <Row xs={2} sm={3} className="g-4">
                         {recipes && recipes.map(recipe => (
-                            <Card key={recipe.id}>
-                                <Card.Body>
-                                    <Card.Title>{recipe.name}</Card.Title>
-                                    <Card.Text>{recipe.description}</Card.Text>
-                                </Card.Body>
-                                <LinkContainer to={`/recipes/${recipe.id}`}>
-                                    <Button variant="primary">View Recipe</Button>
-                                </LinkContainer>
-                            </Card>
+                            <Col>
+                                <Card key={recipe.id} className="h-100">
+                                    <Card.Body>
+                                        <Card.Title>{recipe.name}</Card.Title>
+                                        <Card.Text>{recipe.description}</Card.Text>
+                                    </Card.Body>
+                                    <LinkContainer to={`/recipes/${recipe.id}`}>
+                                        <Button variant="primary">View Recipe</Button>
+                                    </LinkContainer>
+                                </Card>
+                            </Col>
                         ))}
-                    </CardGroup>
+                    </Row>
                 </Col>
                 <Col xs={1} md={2}></Col>
             </Row>
